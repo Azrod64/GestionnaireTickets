@@ -7,6 +7,7 @@ const getTickets = async () => {
         if (!response.ok) {
             throw new Error('Network response was not ok ' + response.statusText);
         }
+        console.log(response);
         return await response.json();
     } catch (error) {
         console.error("There was an error fetching the tickets!", error);
@@ -35,7 +36,7 @@ const createTicket = async (ticket) => {
 
 const updateTicket = async (id, updatedTicket) => {
     try {
-        const response = await fetch(`${AFFICHER_URL}/${id}`, {
+        const response = await fetch(`${TICKET_URL}/${id}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -54,7 +55,7 @@ const updateTicket = async (id, updatedTicket) => {
 
 const deleteTicket = async (id) => {
     try {
-        const response = await fetch(`${API_URL}/${id}`, {
+        const response = await fetch(`${TICKET_URL}/${id}`, {
             method: 'DELETE',
         });
         if (!response.ok) {
