@@ -4,7 +4,7 @@ import './TicketComponent.css';
 
 const TicketComponent = () => {
     const [tickets, setTickets] = useState([]);
-    const [newTicket, setNewTicket] = useState({$description: '' , $serviceConcerne: '', $nomClient: '', $genre:'', $personneAssocie:'', $volumeHoraire:''});
+    const [newTicket, setNewTicket] = useState({description: '' , genre_problem: '', nom_client: '', service_dedie:'', statut:0});
     const [error, setError] = useState(null);
 
     useEffect(() => {
@@ -22,9 +22,10 @@ const TicketComponent = () => {
 
     const handleCreateTicket = async () => {
         try {
+            console.log(newTicket);
             const createdTicket = await ticketService.createTicket(newTicket);
             setTickets([...tickets, createdTicket]);
-            setNewTicket({$description: '' , $serviceConcerne: '', $nomClient: '', $genre:'', $personneAssocie:'', $volumeHoraire:''});
+            setNewTicket({description: '' , genre_problem: '', nom_client: '', service_dedie:'', statut:0});
         } catch (err) {
             setError(err.message);
         }
@@ -33,7 +34,7 @@ const TicketComponent = () => {
     const handleDeleteTicket = async (id) => {
         try {
             await ticketService.deleteTicket(id);
-            setTickets(tickets.filter(ticket => ticket.id !== id));
+            setTickets(tickets.filter(ticket => ticket.idTicket !== id));
         } catch (err) {
             setError(err.message);
         }
@@ -45,9 +46,9 @@ const TicketComponent = () => {
             {error && <p style={{ color: 'red' }}>{error}</p>}
             <ul>
                 {tickets.map(ticket => (
-                    <li key={ticket.id}>
-                        {ticket.title} - {ticket.description}
-                        <button onClick={() => handleDeleteTicket(ticket.id)}>Delete</button>
+                    <li key={ticket.idTicket}>
+                        {ticket.idTicket} - {ticket.description}-{ticket.serviceDedie} - {ticket.nomClient} - {ticket.genreProblem} - {ticket.statut} - {ticket.volHoraire}
+                        <button onClick={() => handleDeleteTicket(ticket.idTicket)}>Delete</button>
                     </li>
                 ))}
             </ul>
@@ -56,38 +57,38 @@ const TicketComponent = () => {
                 <input
                     type="text"
                     placeholder="Description"
-                    value={newTicket.$description}
-                    onChange={(e) => setNewTicket({ ...newTicket, $description: e.target.value })}
+                    value={newTicket.description}
+                    onChange={(e) => setNewTicket({ ...newTicket, description: e.target.value })}
                 />
                 <input
                     type="text"
                     placeholder="Service concerné"
-                    value={newTicket.$serviceConcerne}
-                    onChange={(e) => setNewTicket({ ...newTicket, $serviceConcerne: e.target.value })}
+                    value={newTicket.service_dedie}
+                    onChange={(e) => setNewTicket({ ...newTicket, service_dedie: e.target.value })}
                 />
                 <input
                     type="text"
                     placeholder="Nom du client"
-                    value={newTicket.$nomClient}
-                    onChange={(e) => setNewTicket({ ...newTicket, nomClient: e.target.value })}
+                    value={newTicket.nom_client}
+                    onChange={(e) => setNewTicket({ ...newTicket, nom_client: e.target.value })}
                 />
                 <input
                     type="text"
                     placeholder="Genre"
-                    value={newTicket.$genre}
-                    onChange={(e) => setNewTicket({ ...newTicket, $genre: e.target.value })}
+                    value={newTicket.genre_problem}
+                    onChange={(e) => setNewTicket({ ...newTicket, genre_problem: e.target.value })}
                 />
                 <input
                     type="text"
                     placeholder="Personne Associée"
                     value={newTicket.$personneAssocie}
-                    onChange={(e) => setNewTicket({ ...newTicket, $personneAssocie: e.target.value })}
+                    // onChange={(e) => setNewTicket({ ...newTicket, $personneAssocie: e.target.value })}
                 />
                 <input
                     type="text"
                     placeholder="Volume horaire"
                     value={newTicket.$volumeHoraire}
-                    onChange={(e) => setNewTicket({ ...newTicket, $volumeHoraire: e.target.value })}
+                   //  onChange={(e) => setNewTicket({ ...newTicket, $volumeHoraire: e.target.value })}
                 />
                 <button onClick={handleCreateTicket}>Créer</button>
 

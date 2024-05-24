@@ -61,7 +61,6 @@ const deleteTicket = async (id) => {
         if (!response.ok) {
             throw new Error('Network response was not ok ' + response.statusText);
         }
-        return response.json();
     } catch (error) {
         console.error("There was an error deleting the ticket!", error);
         throw error;
