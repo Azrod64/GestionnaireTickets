@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Gestionnaire d'étudiants</title>
+        <link rel="icon" type="image/x-icon" href="./res/p_polytech.png">
+        <link rel="stylesheet" href="style_modification.css">
+        <script src="modification.js" defer></script>
+    </head>
+
+    <body style="font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue',sans-serif">
+        <h1 >Gestionnaire de tickets </h1>
+        <h2 class="filiere"></h2>
+
+        <form>
+            <label for="description">Prénom</label>
+            <input name="description" id="description" type="text">
+
+            <label for="service concerné">Nom</label>
+            <input name="service concerné" id="service" type="text">
+
+            <label for="numEtu">Numéro Etudiant</label>
+            <input name="numEtu" id="numEtu" type="text">
+
+
+            <input value="Ajouter l'étudiant" type="submit">
+            <p id="error"></p>
+            <br>
+        </form>
+
+        <table style="width: 100%;">
+            <thead>
+                <tr>
+                    <th>Identifiant ticket</th>
+                    <th>description</th>
+                    <th>service concerné</th>
+                    <th>nom du client</th>
+                    <th>Type de problème</th>
+                </tr>
+            </thead>
+            <tbody id="tickets"></tbody>
+        </table>
+        
+        <a href="index.html" style="display: inline-block; margin-top: 10px; padding: 10px; background-color: #007bff; color: white; text-decoration: none; text-align: center;">Confirmer</a>
+    </body>
+</html>

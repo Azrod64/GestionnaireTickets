@@ -41,7 +41,7 @@ const TicketComponent = () => {
 
     return (
         <div>
-            <h1>Tickets</h1>
+            <h1>Gestionnaire de Tickets</h1>
             {error && <p style={{ color: 'red' }}>{error}</p>}
             <ul>
                 {tickets.map(ticket => (
@@ -51,8 +51,8 @@ const TicketComponent = () => {
                     </li>
                 ))}
             </ul>
-            <div>
-                <h2>Créer Ticket</h2>
+            <div id="TicketCreation">
+                <h2>Créer un Ticket</h2>
                 <input
                     type="text"
                     placeholder="Description"
@@ -90,7 +90,24 @@ const TicketComponent = () => {
                     onChange={(e) => setNewTicket({ ...newTicket, $volumeHoraire: e.target.value })}
                 />
                 <button onClick={handleCreateTicket}>Créer</button>
+
+                
             </div>
+            <div id="table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Identifiant ticket</th>
+                            <th>description</th>
+                            <th>service concerné</th>
+                            <th>nom du client</th>
+                            <th>Type de problème</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tickets"></tbody>
+                </table>
+            </div>
+            
         </div>
     );
 };
