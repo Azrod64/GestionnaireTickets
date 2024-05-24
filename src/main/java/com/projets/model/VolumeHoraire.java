@@ -1,5 +1,7 @@
 package com.projets.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
@@ -12,17 +14,20 @@ public class VolumeHoraire {
 	@EmbeddedId
 	VolumeHoraireKey id;
 	
+	int volHoraire;
+	
+	@JsonIgnore
 	@ManyToOne
 	@MapsId("idTicket")
 	@JoinColumn(name = "ticket_id")
 	Ticket ticket;
 	
+	@JsonIgnore
 	@ManyToOne
 	@MapsId("idPersonne")
 	@JoinColumn(name = "personne_id")
 	Personne personne;
 	
-	int volHoraire;
 
 	public VolumeHoraireKey getId() {
 		return id;
