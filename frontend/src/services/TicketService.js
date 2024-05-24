@@ -1,8 +1,9 @@
-const API_URL = 'http://localhost:8080/TicketController'; // L'URL de votre API Spring Boot
+const TICKET_URL = 'http://localhost:8080/ticket'; 
+
 
 const getTickets = async () => {
     try {
-        const response = await fetch(API_URL);
+        const response = await fetch(TICKET_URL);
         if (!response.ok) {
             throw new Error('Network response was not ok ' + response.statusText);
         }
@@ -15,7 +16,7 @@ const getTickets = async () => {
 
 const createTicket = async (ticket) => {
     try {
-        const response = await fetch(API_URL, {
+        const response = await fetch(TICKET_URL, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -34,7 +35,7 @@ const createTicket = async (ticket) => {
 
 const updateTicket = async (id, updatedTicket) => {
     try {
-        const response = await fetch(`${API_URL}/${id}`, {
+        const response = await fetch(`${AFFICHER_URL}/${id}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
