@@ -23,4 +23,44 @@ public class VolumeHoraire {
 	Personne personne;
 	
 	int volHoraire;
+
+	public VolumeHoraireKey getId() {
+		return id;
+	}
+
+	public void setId(VolumeHoraireKey id) {
+		this.id = id;
+	}
+
+	public Ticket getTicket() {
+		return ticket;
+	}
+
+	public void setTicket(Ticket ticket) {
+		this.ticket = ticket;
+	}
+
+	public Personne getPersonne() {
+		return personne;
+	}
+
+	public void setPersonne(Personne personne) {
+		this.personne = personne;
+	}
+
+	public int getVolHoraire() {
+		return volHoraire;
+	}
+
+	public void setVolHoraire(int volHoraire) {
+		this.volHoraire = volHoraire;
+	}
+
+	@Override
+	public String toString() {
+		return "VolumeHoraire [id=" + id + ", ticket=" + ticket + ", personne=" + personne + ", volHoraire="
+				+ volHoraire + "]";
+	}
+	
+	
 }
