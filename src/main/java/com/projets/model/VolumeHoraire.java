@@ -1,6 +1,7 @@
 package com.projets.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
@@ -27,6 +28,25 @@ public class VolumeHoraire {
 	@MapsId("idPersonne")
 	@JoinColumn(name = "personne_id")
 	Personne personne;
+	
+	public VolumeHoraire() {
+		super();
+	}
+
+
+	public VolumeHoraire(VolumeHoraireKey id, int volHoraire, Ticket ticket, Personne personne) {
+		super();
+		this.id = id;
+		this.volHoraire = volHoraire;
+		this.ticket = ticket;
+		this.personne = personne;
+	}
+
+
+	@JsonProperty("nomPersonne") 
+    public String getNomPersonne() {
+        return this.getPersonne().getNom();
+    }
 	
 
 	public VolumeHoraireKey getId() {
