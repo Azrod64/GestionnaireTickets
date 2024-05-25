@@ -110,3 +110,16 @@ tr:not(:last-child){
 tr:nth-child(2n){
     background-color:  #1a1a2e28;
 }
+
+#TicketCreation {
+    display: block;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+}
+
+#TicketCreation > input {
+    display: inline-flex; 
+    flex: 1 1 auto; 
+    min-width: 200px; 
+    margin: 0.5rem; 
+}

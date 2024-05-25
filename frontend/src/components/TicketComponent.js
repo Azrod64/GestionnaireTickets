@@ -4,7 +4,7 @@ import './TicketComponent.css';
 
 const TicketComponent = () => {
     const [tickets, setTickets] = useState([]);
-    const [newTicket, setNewTicket] = useState({ description: '', genre_problem: '', nom_client: '', service_dedie: '', statut: 0 });
+    const [newTicket, setNewTicket] = useState({ description: '', genreProblem: '', nomClient: '', serviceDedie: '', statut: 0 });
     const [error, setError] = useState(null);
 
     useEffect(() => {
@@ -23,12 +23,11 @@ const TicketComponent = () => {
     const handleCreateTicket = async (e) => {
         e.preventDefault();
         try {
-            const createdTicket = await ticketService.createTicket(newTicket);
-            setTickets([...tickets, createdTicket]);
-            setNewTicket({ description: '', genre_problem: '', nom_client: '', service_dedie: '', statut: 0 });
-            
+            const updatedTickets = await ticketService.createTicket(newTicket);
+            setTickets(updatedTickets);
+            setNewTicket({ description: '', genreProblem: '', nomClient: '', serviceDedie: '', statut: 0 });
         } catch (err) {
-            setError(err.message);
+            setError(err.message); 
         }
     };
 
@@ -57,22 +56,22 @@ const TicketComponent = () => {
                 <input
                     type="text"
                     placeholder="Service concerné"
-                    value={newTicket.service_dedie}
-                    onChange={(e) => setNewTicket({ ...newTicket, service_dedie: e.target.value })}
+                    value={newTicket.serviceDedie}
+                    onChange={(e) => setNewTicket({ ...newTicket, serviceDedie: e.target.value })}
                     required="required"
                 />
                 <input
                     type="text"
                     placeholder="Nom du client"
-                    value={newTicket.nom_client}
-                    onChange={(e) => setNewTicket({ ...newTicket, nom_client: e.target.value })}
+                    value={newTicket.nomClient}
+                    onChange={(e) => setNewTicket({ ...newTicket, nomClient: e.target.value })}
                     required="required"
                 />
                 <input
                     type="text"
                     placeholder="Genre"
-                    value={newTicket.genre_problem}
-                    onChange={(e) => setNewTicket({ ...newTicket, genre_problem: e.target.value })}
+                    value={newTicket.genreProblem}
+                    onChange={(e) => setNewTicket({ ...newTicket, genreProblem: e.target.value })}
                     required="required"
                 />
                 <input
