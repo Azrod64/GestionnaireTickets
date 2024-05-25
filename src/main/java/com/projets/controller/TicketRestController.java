@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,22 +29,25 @@ public class TicketRestController {
 	@Autowired TicketService ticketService;
 	@Autowired PersonneRepository personneRepository;
 	
+	@CrossOrigin(origins = "http://localhost:3000")
 	@GetMapping("/ticket")
 	public List<Ticket> getTickets() {
 		return ticketRepository.findAllTickets();
 	}
 	
-	
+	@CrossOrigin(origins = "http://localhost:3000")
 	@PostMapping("/ticket")
     public ResponseEntity<Ticket> addTicket(@RequestBody TicketDTO ticketDTO) {
         return ResponseEntity.ok(saveOrUpdateTicket(null, ticketDTO));
     }
-
+	
+	@CrossOrigin(origins = "http://localhost:3000")
     @PutMapping("/ticket/{id}")
     public ResponseEntity<Ticket> updateTicket(@PathVariable int id, @RequestBody TicketDTO ticketDTO) {
         return ResponseEntity.ok(saveOrUpdateTicket(id, ticketDTO));
     }
 	
+	@CrossOrigin(origins = "http://localhost:3000")
 	@DeleteMapping("/ticket/{id}")
 	public ResponseEntity<Void> deleteTicket(@PathVariable("id") int id ) {
 	  ticketService.deleteTicket(id);
