@@ -20,11 +20,13 @@ const TicketComponent = () => {
         fetchTickets();
     }, []);
 
-    const handleCreateTicket = async () => {
+    const handleCreateTicket = async (e) => {
+        e.preventDefault();
         try {
             const createdTicket = await ticketService.createTicket(newTicket);
             setTickets([...tickets, createdTicket]);
             setNewTicket({ description: '', genre_problem: '', nom_client: '', service_dedie: '', statut: 0 });
+            
         } catch (err) {
             setError(err.message);
         }
@@ -43,46 +45,52 @@ const TicketComponent = () => {
         <div>
             <h1>Gestionnaire de Tickets</h1>
 
-            <div id="TicketCreation">
+            <form id="TicketCreation" onSubmit={handleCreateTicket}>
                 <h2>Créer un Ticket</h2>
                 <input
                     type="text"
                     placeholder="Description"
                     value={newTicket.description}
                     onChange={(e) => setNewTicket({ ...newTicket, description: e.target.value })}
+                    required="required"
                 />
                 <input
                     type="text"
                     placeholder="Service concerné"
                     value={newTicket.service_dedie}
                     onChange={(e) => setNewTicket({ ...newTicket, service_dedie: e.target.value })}
+                    required="required"
                 />
                 <input
                     type="text"
                     placeholder="Nom du client"
                     value={newTicket.nom_client}
                     onChange={(e) => setNewTicket({ ...newTicket, nom_client: e.target.value })}
+                    required="required"
                 />
                 <input
                     type="text"
                     placeholder="Genre"
                     value={newTicket.genre_problem}
                     onChange={(e) => setNewTicket({ ...newTicket, genre_problem: e.target.value })}
+                    required="required"
                 />
                 <input
                     type="text"
                     placeholder="Personne Associée"
                     value={newTicket.$personneAssocie}
+                    required="required"
                     // onChange={(e) => setNewTicket({ ...newTicket, $personneAssocie: e.target.value })}
                 />
                 <input
                     type="text"
                     placeholder="Volume horaire"
                     value={newTicket.$volumeHoraire}
+                    required="required"
                     //  onChange={(e) => setNewTicket({ ...newTicket, $volumeHoraire: e.target.value })}
                 />
-                <button onClick={handleCreateTicket}>Créer</button>
-            </div>
+                <button type="submit">Créer</button>
+            </form>
 
             <div id="table">
                 <table>
