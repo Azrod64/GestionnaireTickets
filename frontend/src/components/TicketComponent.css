@@ -10,7 +10,11 @@ body{
 }
 
 h1{
-    text-align: center;
+    margin: 0;
+    color: white;
+    padding: 10px;
+    text-align: left;
+    background-color: rgb(72, 72, 78);
 }
 h2{
     margin: 20px 0 20px 10px;
@@ -58,27 +62,41 @@ button:hover{
     background-color: #2a72e6;
 }
 
-
 #table{
     width: 90%;
-    display: flexbox;
+    display: flex;
     margin: 0px auto 0px auto;
-    justify-self: center;
-    text-align: center;
-    border-collapse: collapse;
     border: solid 1px black;
     border-top: none;
     
 
 }
+#table > table {
+    width: 100%;
+
+}
+
+th:last-child{
+    padding: 0;
+}
 
 td{
     padding: 0.75em 1em;
+    text-align: center;
     
 }
+td > img{
+    
+    cursor: pointer;
+    transition: 500ms;
+}
 
-td img{
-    width: 1em;
+td > img:hover{
+    transform: scale(1.15);
+    transform: rotate(-10deg);
+
+    filter: drop-shadow(5px 5px 5px rgb(218, 218, 218));
+
     cursor: pointer;
 }
 thead tr{

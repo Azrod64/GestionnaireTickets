@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import ticketService from '../services/TicketService'; 
+import ticketService from '../services/TicketService';
 import './TicketComponent.css';
 
 const TicketComponent = () => {
     const [tickets, setTickets] = useState([]);
-    const [newTicket, setNewTicket] = useState({description: '' , genre_problem: '', nom_client: '', service_dedie:'', statut:0});
+    const [newTicket, setNewTicket] = useState({ description: '', genre_problem: '', nom_client: '', service_dedie: '', statut: 0 });
     const [error, setError] = useState(null);
 
     useEffect(() => {
@@ -22,10 +22,9 @@ const TicketComponent = () => {
 
     const handleCreateTicket = async () => {
         try {
-            console.log(newTicket);
             const createdTicket = await ticketService.createTicket(newTicket);
             setTickets([...tickets, createdTicket]);
-            setNewTicket({description: '' , genre_problem: '', nom_client: '', service_dedie:'', statut:0});
+            setNewTicket({ description: '', genre_problem: '', nom_client: '', service_dedie: '', statut: 0 });
         } catch (err) {
             setError(err.message);
         }
@@ -43,15 +42,7 @@ const TicketComponent = () => {
     return (
         <div>
             <h1>Gestionnaire de Tickets</h1>
-            {error && <p style={{ color: 'red' }}>{error}</p>}
-            <ul>
-                {tickets.map(ticket => (
-                    <li key={ticket.idTicket}>
-                        {ticket.idTicket} - {ticket.description}-{ticket.serviceDedie} - {ticket.nomClient} - {ticket.genreProblem} - {ticket.statut} - {ticket.volHoraire}
-                        <button onClick={() => handleDeleteTicket(ticket.idTicket)}>Delete</button>
-                    </li>
-                ))}
-            </ul>
+
             <div id="TicketCreation">
                 <h2>Créer un Ticket</h2>
                 <input
@@ -88,27 +79,52 @@ const TicketComponent = () => {
                     type="text"
                     placeholder="Volume horaire"
                     value={newTicket.$volumeHoraire}
-                   //  onChange={(e) => setNewTicket({ ...newTicket, $volumeHoraire: e.target.value })}
+                    //  onChange={(e) => setNewTicket({ ...newTicket, $volumeHoraire: e.target.value })}
                 />
                 <button onClick={handleCreateTicket}>Créer</button>
-
-                
             </div>
+
             <div id="table">
                 <table>
                     <thead>
                         <tr>
                             <th>Identifiant ticket</th>
-                            <th>description</th>
-                            <th>service concerné</th>
-                            <th>nom du client</th>
+                            <th>Description</th>
+                            <th>Service concerné</th>
+                            <th>Nom du client</th>
                             <th>Type de problème</th>
+                            <th id="icons">Actions</th>
                         </tr>
                     </thead>
-                    <tbody id="tickets"></tbody>
+                    <tbody id="tickets">
+                        {tickets.map(ticket => (
+                            <tr key={ticket.idTicket}>
+                                <td>{ticket.idTicket}</td>
+                                <td>{ticket.description}</td>
+                                <td>{ticket.serviceDedie}</td>
+                                <td>{ticket.nomClient}</td>
+                                <td>{ticket.genreProblem}</td>
+                                <td>{ticket.statut}</td>
+                                <td>{ticket.volHoraire}</td>
+                                <td>
+                                    <img
+                                        style={{ width: '1.3em', margin: '0 5px 0 0' }}
+                                        src={`${process.env.PUBLIC_URL}/images/modify.png`}
+                                        alt="modify"
+                                    />
+                                    <img
+                                        style={{ width: '1.3em' }}
+                                        src={`${process.env.PUBLIC_URL}/images/trash.png`}
+                                        alt="remove"
+                                        onClick={() => handleDeleteTicket(ticket.idTicket)}
+                                    />
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
                 </table>
             </div>
-            
+            {error && <p style={{ color: 'red' }}>{error}</p>}
         </div>
     );
 };
