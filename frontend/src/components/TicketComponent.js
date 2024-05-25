@@ -5,6 +5,8 @@ import './TicketComponent.css';
 const TicketComponent = () => {
     const [tickets, setTickets] = useState([]);
     const [newTicket, setNewTicket] = useState({ description: '', genreProblem: '', nomClient: '', serviceDedie: '', statut: 0 });
+    const [additionalInputs, setAdditionalInputs] = useState([{ personneAssocie: '', volumeHoraire: '' }]);
+
     const [error, setError] = useState(null);
 
     useEffect(() => {
@@ -29,6 +31,22 @@ const TicketComponent = () => {
         } catch (err) {
             setError(err.message); 
         }
+    };
+
+    const handleAddInputs  =() =>{
+        setAdditionalInputs([...additionalInputs, { personneAssocie: '', volumeHoraire: '' }]);
+    }
+
+    const handleAdditionalInputChange = (e, index, key) => {
+        const newInputs = [...additionalInputs];
+        newInputs[index][key] = e.target.value;
+        setAdditionalInputs(newInputs);
+    };
+    
+    const handleRemoveInput = (index) => {
+        const newInputs = [...additionalInputs];
+        newInputs.splice(index, 1);
+        setAdditionalInputs(newInputs);
     };
 
     const handleDeleteTicket = async (id) => {
@@ -88,7 +106,27 @@ const TicketComponent = () => {
                     required="required"
                     //  onChange={(e) => setNewTicket({ ...newTicket, $volumeHoraire: e.target.value })}
                 />
-                <button type="submit">Créer</button>
+                {additionalInputs.map((input, index) => (
+    <div id ="AddedInputs" key={index}>
+        <input
+            type="text"
+            placeholder="Personne Associée"
+            value={input.personneAssocie}
+            onChange={(e) => handleAdditionalInputChange(e, index, 'personneAssocie')}
+            required="required"
+        />
+        <input
+            type="text"
+            placeholder="Volume horaire"
+            value={input.volumeHoraire}
+            onChange={(e) => handleAdditionalInputChange(e, index, 'volumeHoraire')}
+            required="required"
+        />
+        <button id="remove" type="button" onClick={() => handleRemoveInput(index)}>-</button>
+    </div>
+))}
+                <button type="button" id="add"  onClick={handleAddInputs}> + </button>
+                <button type="submit" id="submit">Créer</button>
             </form>
 
             <div id="table">
@@ -112,7 +150,6 @@ const TicketComponent = () => {
                                 <td>{ticket.nomClient}</td>
                                 <td>{ticket.genreProblem}</td>
                                 <td>{ticket.statut}</td>
-                                <td>{ticket.volHoraire}</td>
                                 <td>
                                     <img
                                         style={{ width: '1.3em', margin: '0 5px 0 0' }}
