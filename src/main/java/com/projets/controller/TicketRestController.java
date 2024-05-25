@@ -28,7 +28,7 @@ public class TicketRestController {
 	@PostMapping("/ticket")
 	public List<Ticket> addTicket(@RequestBody Ticket t) {
 		ticketRepository.save(t);
-		return ticketRepository.findAll();
+		return ticketRepository.findAllTickets();
 	}
 	
 	@DeleteMapping("/ticket/{id}")
