@@ -3,9 +3,9 @@ import TicketComponent from './components/TicketComponent';
 
 const App = () => {
     return (
-        <div>
-            <TicketComponent />
-        </div>
+        
+            <TicketComponent />      
+        
     );
 };
 
