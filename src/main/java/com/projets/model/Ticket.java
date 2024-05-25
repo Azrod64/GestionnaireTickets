@@ -1,8 +1,9 @@
 package com.projets.model;
 
+import java.util.HashSet;
 import java.util.Set;
 
-
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -22,8 +23,8 @@ public class Ticket {
     private String genreProblem;
     private int statut;
     
-    @OneToMany(mappedBy = "ticket")
-    Set<VolumeHoraire> volHoraire;
+    @OneToMany(mappedBy = "ticket", cascade = CascadeType.ALL, orphanRemoval = true)
+    Set<VolumeHoraire> volHoraire = new HashSet<>();
 
 	public int getIdTicket() {
 		return idTicket;
@@ -104,5 +105,15 @@ public class Ticket {
 		this.volHoraire = volHoraire;
 	}
     
+	 // Method to add volHoraire
+    public void addVolumeHoraire(VolumeHoraire volumeHoraire) {
+        volHoraire.add(volumeHoraire);
+        volumeHoraire.setTicket(this);
+    }
+
+    public void removeVolumeHoraire(VolumeHoraire volumeHoraire) {
+        volHoraire.remove(volumeHoraire);
+        volumeHoraire.setTicket(null);
+    }
     
 }

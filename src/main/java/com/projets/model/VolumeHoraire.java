@@ -29,6 +29,20 @@ public class VolumeHoraire {
 	@JoinColumn(name = "personne_id")
 	Personne personne;
 	
+	public VolumeHoraire() {
+		super();
+	}
+
+
+	public VolumeHoraire(VolumeHoraireKey id, int volHoraire, Ticket ticket, Personne personne) {
+		super();
+		this.id = id;
+		this.volHoraire = volHoraire;
+		this.ticket = ticket;
+		this.personne = personne;
+	}
+
+
 	@JsonProperty("nomPersonne") 
     public String getNomPersonne() {
         return this.getPersonne().getNom();
