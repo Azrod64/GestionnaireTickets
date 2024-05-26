@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import ticketService from '../services/TicketService';
 import './TicketComponent.css';
+import { useNavigate } from "react-router-dom";
 
 const TicketComponent = () => {
     const [tickets, setTickets] = useState([]);
     const [newTicket, setNewTicket] = useState({ description: '', genreProblem: '', nomClient: '', serviceDedie: '', statut: 0 });
     const [additionalInputs, setAdditionalInputs] = useState([{ personneAssocie: '', volumeHoraire: '' }]);
-
+    const [menuOpen, setMenuOpen] = useState(false);
     const [error, setError] = useState(null);
 
     useEffect(() => {
@@ -57,10 +58,27 @@ const TicketComponent = () => {
             setError(err.message);
         }
     };
+    const toggleMenu = () => {
+        setMenuOpen(!menuOpen);
+    };
 
     return (
         <div>
+            <div className={`burger-menu ${menuOpen ? 'open' : ''}`} onClick={toggleMenu}>
+                <div className="burger-menu-line"> </div>
+                <div className="burger-menu-line"></div>
+                <div className="burger-menu-line"></div>
+                
+            </div>
+
             <h1>Gestionnaire de Tickets</h1>
+
+            <div className={`menu-links ${menuOpen ? 'open' : ''}`}>
+                <a>Gestionnaire de Ticket</a>
+                <a href="/Personnes">Gestionnaire de Personnes</a>
+                
+                
+            </div>
 
             <form id="TicketCreation" onSubmit={handleCreateTicket}>
                 <h2>Créer un Ticket</h2>

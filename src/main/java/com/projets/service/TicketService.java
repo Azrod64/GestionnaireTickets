@@ -13,4 +13,5 @@ public class TicketService {
 	public void deleteTicket(int id) {
 		ticketRespository.deleteById(id);
 	}
+	
 }
