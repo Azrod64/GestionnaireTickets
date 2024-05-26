@@ -14,6 +14,9 @@ public class Ingenieur extends Personne{
 	public String getQualifications() {
 		return qualifications;
 	}
+	public Ingenieur() {
+		super();
+	}
 	public void setQualifications(String qualifications) {
 		this.qualifications = qualifications;
 	}

@@ -21,6 +21,7 @@ import com.projets.model.VolumeHoraire;
 import com.projets.model.VolumeHoraireKey;
 import com.projets.repository.PersonneRepository;
 import com.projets.repository.TicketRepository;
+import com.projets.repository.VolumeHoraireRepository;
 import com.projets.service.TicketService;
 
 @RestController
@@ -28,6 +29,7 @@ public class TicketRestController {
 	@Autowired TicketRepository ticketRepository;
 	@Autowired TicketService ticketService;
 	@Autowired PersonneRepository personneRepository;
+	@Autowired VolumeHoraireRepository volumeHoraireRepository;
 	
 	@CrossOrigin(origins = "http://localhost:3000")
 	@GetMapping("/ticket")
@@ -56,10 +58,9 @@ public class TicketRestController {
 	
 	private Ticket saveOrUpdateTicket(Integer id, TicketDTO ticketDTO) {
         Ticket ticket;
-
-        if (id == null) {  // It's a new ticket
+        if (id == null) {  // New Ticket
             ticket = new Ticket();
-        } else {  // It's a ticket update
+        } else {  // Updating existing ticket
             ticket = ticketRepository.findById(id).orElseThrow(() -> new RuntimeException("Ticket not found"));
             ticket.getVolHoraire().clear();
         }
@@ -69,19 +70,17 @@ public class TicketRestController {
         ticket.setNomClient(ticketDTO.getNomClient());
         ticket.setGenreProblem(ticketDTO.getGenreProblem());
         ticket.setStatut(ticketDTO.getStatut());
-
+        
         for (VolumeHoraireDTO vhDTO : ticketDTO.getVolHoraire()) {
-            VolumeHoraireKey vhKey = new VolumeHoraireKey();
-            vhKey.setIdPersonne(vhDTO.getIdPersonne());
+            VolumeHoraireKey vhKey = new VolumeHoraireKey(id, vhDTO.getIdPersonne());
+            VolumeHoraire vh = ticket.getVolHoraire().stream()
+                .filter(v -> v.getId().equals(vhKey))
+                .findFirst()
+                .orElse(new VolumeHoraire());
 
-            VolumeHoraire vh = new VolumeHoraire();
             vh.setId(vhKey);
             vh.setVolHoraire(vhDTO.getVolHoraire());
-
-            Personne personne = personneRepository.findById(vhDTO.getIdPersonne()).orElse(null);
-            if (personne == null) {
-                throw new RuntimeException("Person not found");
-            }
+            Personne personne = personneRepository.findById(vhDTO.getIdPersonne()).orElseThrow(() -> new RuntimeException("Person not found"));
             vh.setPersonne(personne);
             vh.setTicket(ticket);
             ticket.getVolHoraire().add(vh);

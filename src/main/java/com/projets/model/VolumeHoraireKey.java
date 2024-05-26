@@ -43,7 +43,17 @@ public class VolumeHoraireKey implements Serializable{
                 idPersonne == that.idPersonne;
     }
 
-    @Override
+    public VolumeHoraireKey() {
+		super();
+	}
+
+	public VolumeHoraireKey(int idTicket, int idPersonne) {
+		super();
+		this.idTicket = idTicket;
+		this.idPersonne = idPersonne;
+	}
+
+	@Override
     public int hashCode() {
         return Objects.hash(idTicket, idPersonne);
     }

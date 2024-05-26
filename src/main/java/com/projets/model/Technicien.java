@@ -18,5 +18,9 @@ public class Technicien extends Personne{
 	public String toString() {
 		return "Technicien [competences=" + competences + "]";
 	}
+
+	public Technicien() {
+		super();
+	}
 	
 }
