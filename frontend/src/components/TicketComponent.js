@@ -1,7 +1,7 @@
     import React, { useState, useEffect } from 'react';
     import ticketService from '../services/TicketService';
     import './TicketComponent.css';
-    import { useNavigate } from "react-router-dom";
+    
 
     const TicketComponent = () => {
         const [tickets, setTickets] = useState([]);
@@ -101,7 +101,7 @@
                 <h1>Gestionnaire de Tickets</h1>
 
                 <div className={`menu-links ${menuOpen ? 'open' : ''}`}>
-                    <a>Gestionnaire de Ticket</a>
+                    <a href='/'>Gestionnaire de Ticket</a>
                     <a href="/Personnes">Gestionnaire de Personnes</a>
                     
                     
