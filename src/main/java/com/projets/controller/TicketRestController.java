@@ -24,6 +24,8 @@ import com.projets.repository.TicketRepository;
 import com.projets.repository.VolumeHoraireRepository;
 import com.projets.service.TicketService;
 
+import jakarta.transaction.Transactional;
+
 @RestController
 public class TicketRestController {
 	@Autowired TicketRepository ticketRepository;
@@ -56,35 +58,34 @@ public class TicketRestController {
 	  return ResponseEntity.noContent().build();
 	}
 	
+	@Transactional
 	private Ticket saveOrUpdateTicket(Integer id, TicketDTO ticketDTO) {
-        Ticket ticket;
-        if (id == null) {  // New Ticket
-            ticket = new Ticket();
-        } else {  // Updating existing ticket
-            ticket = ticketRepository.findById(id).orElseThrow(() -> new RuntimeException("Ticket not found"));
-            ticket.getVolHoraire().clear();
-        }
+	    Ticket ticket;
+	    if (id == null) {  // New Ticket
+	        ticket = new Ticket();
+	    } else {  // Updating existing ticket
+	        ticket = ticketRepository.findById(id).orElseThrow(() -> new RuntimeException("Ticket not found"));
+	        ticket.getVolHoraire().clear();
+	    }
 
-        ticket.setDescription(ticketDTO.getDescription());
-        ticket.setServiceDedie(ticketDTO.getServiceDedie());
-        ticket.setNomClient(ticketDTO.getNomClient());
-        ticket.setGenreProblem(ticketDTO.getGenreProblem());
-        ticket.setStatut(ticketDTO.getStatut());
-        
-        for (VolumeHoraireDTO vhDTO : ticketDTO.getVolHoraire()) {
-            VolumeHoraireKey vhKey = new VolumeHoraireKey(id, vhDTO.getIdPersonne());
-            VolumeHoraire vh = ticket.getVolHoraire().stream()
-                .filter(v -> v.getId().equals(vhKey))
-                .findFirst()
-                .orElse(new VolumeHoraire());
+	    ticket.setDescription(ticketDTO.getDescription());
+	    ticket.setServiceDedie(ticketDTO.getServiceDedie());
+	    ticket.setNomClient(ticketDTO.getNomClient());
+	    ticket.setGenreProblem(ticketDTO.getGenreProblem());
+	    ticket.setStatut(ticketDTO.getStatut());
 
-            vh.setId(vhKey);
-            vh.setVolHoraire(vhDTO.getVolHoraire());
-            Personne personne = personneRepository.findById(vhDTO.getIdPersonne()).orElseThrow(() -> new RuntimeException("Person not found"));
-            vh.setPersonne(personne);
-            vh.setTicket(ticket);
-            ticket.getVolHoraire().add(vh);
-        }
-        return ticketRepository.save(ticket);
-    }
+	    Ticket savedTicket = ticketRepository.save(ticket); // Save the ticket first to get the id
+
+	    for (VolumeHoraireDTO vhDTO : ticketDTO.getVolHoraire()) {
+	        VolumeHoraireKey vhKey = new VolumeHoraireKey(savedTicket.getIdTicket(), vhDTO.getIdPersonne()); // Use savedTicket.getIdTicket()
+	        VolumeHoraire vh = new VolumeHoraire();
+	        vh.setId(vhKey);
+	        vh.setVolHoraire(vhDTO.getVolHoraire());
+	        Personne personne = personneRepository.findById(vhDTO.getIdPersonne()).orElseThrow(() -> new RuntimeException("Person not found"));
+	        vh.setPersonne(personne);
+	        vh.setTicket(savedTicket);
+	        volumeHoraireRepository.save(vh); // Save each volume horaire
+	    }
+	    return savedTicket;
+	}
 }
