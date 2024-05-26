@@ -9,6 +9,8 @@
         const [additionalInputs, setAdditionalInputs] = useState([{ volHoraire: '', idPersonne: '' }]);
         const [menuOpen, setMenuOpen] = useState(false);
         const [error, setError] = useState(null);
+        const [editingTicketId, setEditingTicketId] = useState(null);
+        const [draftTicket, setDraftTicket] = useState({});
 
         useEffect(() => {
             const fetchTickets = async () => {
@@ -68,6 +70,24 @@
         const toggleMenu = () => {
             setMenuOpen(!menuOpen);
         };
+
+        const editTicket = (id) => {
+            setEditingTicketId(id);
+            const ticket = tickets.find(t => t.idTicket === id);
+            setDraftTicket({...ticket});
+        };
+        
+        const saveChanges = async (id) => {
+            try {
+                await ticketService.updateTicket(id, draftTicket);
+                console.log(draftTicket);
+                setTickets(tickets.map(ticket => ticket.idTicket === id ? {...ticket, ...draftTicket} : ticket));
+                setEditingTicketId(null); 
+            } catch (error) {
+                console.error("There was an error updating the ticket!", error);
+            }
+        };
+        
 
         return (
             <div>
@@ -153,30 +173,88 @@
                             </tr>
                         </thead>
                         <tbody id="tickets">
-                            {tickets.map(ticket => (
-                                <tr key={ticket.idTicket}>
-                                    <td>{ticket.idTicket}</td>
-                                    <td>{ticket.description}</td>
-                                    <td>{ticket.serviceDedie}</td>
-                                    <td>{ticket.nomClient}</td>
-                                    <td>{ticket.genreProblem}</td>
-                                    <td>{ticket.statut}</td>
-                                    <td>
-                                        <img
-                                            style={{ width: '1.3em', margin: '0 5px 0 0' }}
-                                            src={`${process.env.PUBLIC_URL}/images/modify.png`}
-                                            alt="modify"
-                                        />
-                                        <img
-                                            style={{ width: '1.3em' }}
-                                            src={`${process.env.PUBLIC_URL}/images/trash.png`}
-                                            alt="remove"
-                                            onClick={() => handleDeleteTicket(ticket.idTicket)}
-                                        />
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
+    {tickets.map((ticket) => (
+        <tr key={ticket.idTicket}>
+            <td>{ticket.idTicket}</td>
+            <td>
+                {editingTicketId === ticket.idTicket ? (
+                    <input
+                        type="text"
+                        value={draftTicket.description}
+                        onChange={(e) => setDraftTicket({ ...draftTicket, description: e.target.value })}
+                    />
+                ) : (
+                    ticket.description
+                )}
+            </td>
+            <td>
+                {editingTicketId === ticket.idTicket ? (
+                    <input
+                        type="text"
+                        value={draftTicket.serviceDedie}
+                        onChange={(e) => setDraftTicket({ ...draftTicket, serviceDedie: e.target.value })}
+                    />
+                ) : (
+                    ticket.serviceDedie
+                )}
+            </td>
+            <td>
+                {editingTicketId === ticket.idTicket ? (
+                    <input
+                        type="text"
+                        value={draftTicket.nomClient}
+                        onChange={(e) => setDraftTicket({ ...draftTicket, nomClient: e.target.value })}
+                    />
+                ) : (
+                    ticket.nomClient
+                )}
+            </td>
+            <td>
+                {editingTicketId === ticket.idTicket ? (
+                    <input
+                        type="text"
+                        value={draftTicket.genreProblem}
+                        onChange={(e) => setDraftTicket({ ...draftTicket, genreProblem: e.target.value })}
+                    />
+                ) : (
+                    ticket.genreProblem
+                )}
+            </td>
+            <td>
+                {editingTicketId === ticket.idTicket ? (
+                    <select
+                        value={draftTicket.statut}
+                        onChange={(e) => setDraftTicket({ ...draftTicket, statut: e.target.value })}
+                    >
+                        <option value={0}>Ouvert</option>
+                        <option value={1}>Fermé</option>
+                    </select>
+                ) : (
+                    ticket.statut === 0 ? "Ouvert" : "Fermé"
+                )}
+            </td>
+            <td>
+                {editingTicketId === ticket.idTicket ? (
+                    <button onClick={() => saveChanges(ticket.idTicket)}>Save</button>
+                ) : (
+                    <img
+                        style={{ width: '1.3em', margin: '0 5px 0 0' }}
+                        src={`${process.env.PUBLIC_URL}/images/modify.png`}
+                        alt="modify"
+                        onClick={() => editTicket(ticket.idTicket)}
+                    />
+                )}
+                <img
+                    style={{ width: '1.3em' }}
+                    src={`${process.env.PUBLIC_URL}/images/trash.png`}
+                    alt="remove"
+                    onClick={() => handleDeleteTicket(ticket.idTicket)}
+                />
+            </td>
+        </tr>
+    ))}
+</tbody>
+
                     </table>
                 </div>
                 {error && <p style={{ color: 'red' }}>{error}</p>}
