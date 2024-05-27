@@ -57,66 +57,95 @@ const PersonnesComponent = () => {
         setMenuOpen(!menuOpen);
     };
     return (
-        <div>
+      <div>
         <div className={`burger-menu ${menuOpen ? 'open' : ''}`} onClick={toggleMenu}>
-                    <div className="burger-menu-line"> </div>
-                    <div className="burger-menu-line"></div>
-                    <div className="burger-menu-line"></div>
-                    
-                </div>
-
-                <h1>Gestionnaire de Personnes</h1>
-
-                <div className={`menu-links ${menuOpen ? 'open' : ''}`}>
-                    <a href="/">Gestionnaire de Ticket</a>
-                    <a href="/Personnes">Gestionnaire de Personnes</a>
-                    
-                    
-                </div>
-       
+          <div className="burger-menu-line"></div>
+          <div className="burger-menu-line"></div>
+          <div className="burger-menu-line"></div>
+        </div>
+  
+        <h1>Gestionnaire de Personnes</h1>
+  
+        <div className={`menu-links ${menuOpen ? 'open' : ''}`}>
+          <a href="/">Gestionnaire de Ticket</a>
+          <a href="/Personnes">Gestionnaire de Personnes</a>
+        </div>
+  
         <form id="formContainer" onSubmit={handleSubmit}>
-        <label htmlFor="email">Email:</label>
-        <input
-          type="email"
-          id="email"
-          name="email"
-          value={formData.email}
-          onChange={handleChange}
-        />
-        <label htmlFor="mdp">Mot de passe:</label>
-        <input
-          type="password"
-          id="mdp"
-          name="mdp"
-          value={formData.mdp}
-          onChange={handleChange}
-        />
-
-        <label htmlFor="nom">Nom:</label>
-        <input
-          type="text"
-          id="nom"
-          name="nom"
-          value={formData.nom}
-          onChange={handleChange}
-        />
-        <label htmlFor="prenom">Prénom:</label>
-        <input
-          type="text"
-          id="prenom"
-          name="prenom"
-          value={formData.prenom}
-          onChange={handleChange}
-        />
-
-        <label htmlFor="role">Rôle:</label>
-        <select id="role" name="role" value={formData.role} onChange={handleChange}>
-          <option value="ingenieur">Ingénieur</option>
-          <option value="technicien">Technicien</option>
-        </select>
-      <button id="submit" type="submit">Soumettre</button>
-
-    </form>
+          <label htmlFor="email">Email:</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            value={formData.email}
+            onChange={handleChange}
+          />
+          <label htmlFor="mdp">Mot de passe:</label>
+          <input
+            type="password"
+            id="mdp"
+            name="mdp"
+            value={formData.mdp}
+            onChange={handleChange}
+          />
+          <label htmlFor="nom">Nom:</label>
+          <input
+            type="text"
+            id="nom"
+            name="nom"
+            value={formData.nom}
+            onChange={handleChange}
+          />
+          <label htmlFor="prenom">Prénom:</label>
+          <input
+            type="text"
+            id="prenom"
+            name="prenom"
+            value={formData.prenom}
+            onChange={handleChange}
+          />
+          <label htmlFor="role">Rôle:</label>
+          <select id="role" name="role" value={formData.role} onChange={handleChange}>
+            <option value="ingenieur">Ingénieur</option>
+            <option value="technicien">Technicien</option>
+          </select>
+  
+          {formData.role === 'ingenieur' && (
+            <>
+              <label htmlFor="qualifications">Qualifications:</label>
+              <input
+                type="text"
+                id="qualifications"
+                name="qualifications"
+                value={formData.qualifications}
+                onChange={handleChange}
+              />
+              <label htmlFor="projets">Nombre de projets à réaliser:</label>
+              <input
+                type="number"
+                id="projets"
+                name="projets"
+                value={formData.projets}
+                onChange={handleChange}
+              />
+            </>
+          )}
+  
+          {formData.role === 'technicien' && (
+            <>
+              <label htmlFor="competences">Compétences:</label>
+              <input
+                type="text"
+                id="competences"
+                name="competences"
+                value={formData.competences}
+                onChange={handleChange}
+              />
+            </>
+          )}
+  
+          <button id="submit" type="submit">Soumettre</button>
+        </form>
       <div id='table'>
       <table>
         <thead>

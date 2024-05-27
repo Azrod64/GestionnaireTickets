@@ -219,3 +219,6 @@ tr:nth-child(2n){
     background-color: #f0f0f0;
     color: #000;
 }
+label{
+    margin: 0 0 0 10px;
+}
