@@ -1,9 +1,23 @@
-import { useState } from 'react';
-import React from 'react';
-import './Popup.css'; // Assurez-vous de créer un fichier CSS pour le style du popup
+import React, { useEffect, useState } from 'react';
+import './Popup.css';
+import personneService from '../services/PersonneService';
 
 const Popup = ({ ticket, onClose }) => {
-    const [editingTicketId, setEditingTicketId] = useState(null);
+    const [personnes, setPersonnes] = useState([]);
+    const [error, setError] = useState(null);
+
+    useEffect(() => {
+        const fetchPersonnes = async () => {
+            try {
+                const personnesData = await personneService.getPersonnes();
+                setPersonnes(personnesData);
+            } catch (err) {
+                setError("Erreur lors du chargement des données des personnes: " + err.message);
+            }
+        };
+
+        fetchPersonnes();
+    }, []);
 
     return (
         <div className="popup">
@@ -19,34 +33,18 @@ const Popup = ({ ticket, onClose }) => {
                         </tr>
                     </thead>
                     <tbody>
-                        {ticket.volHoraire.map((item, index) => (
-                            <tr key={index}>
-                                <td>{item.nomPersonne}</td>
-                                <td>{item.volHoraire}</td>
-                                <td>
-                                    {editingTicketId === ticket.idTicket ? (
-                                        <img style={{ width: '1.3em', margin: '0 5px 0 0' }}
-                                            src={`${process.env.PUBLIC_URL}/images/validate.png`}
-                                            alt="modify" onClick={() => ("")} />
-                                    ) : (
-                                        <img
-                                            style={{ width: '1.3em', margin: '0 5px 0 0' }}
-                                            src={`${process.env.PUBLIC_URL}/images/modify.png`}
-                                            alt="modify"
-                                            onClick={() => ("")}
-                                        />
-                                    )}
-                                    <img
-                                        style={{ width: '1.3em' }}
-                                        src={`${process.env.PUBLIC_URL}/images/trash.png`}
-                                        alt="remove"
-                                        onClick={() => ("")}
-                                    />
-                                </td>
-                            </tr>
-                        ))}
+                        {ticket.volHoraire.map((item, index) => {
+                            const personne = personnes.find(p => p.idPersonne === item.id.idPersonne);
+                            return (
+                                <tr key={index}>
+                                    <td>{personne ? `${personne.prenom} ${personne.nom}` : 'N/A'}</td>
+                                    <td>{item.volHoraire}</td>
+                                </tr>
+                            );
+                        })}
                     </tbody>
                 </table>
+                {error && <p style={{ color: 'red' }}>{error}</p>}
             </div>
         </div>
     );
