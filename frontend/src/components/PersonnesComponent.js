@@ -92,11 +92,22 @@ const PersonnesComponent = () => {
         setMenuOpen(!menuOpen);
     };
 
-    const editPerson = (personId) => {
-    };
 
-    const saveChanges = async (personId) => {
-    };
+    const editPerson = (personId) => {
+      setEditingPersonId(personId);
+      const person = people.find(t => t.idPersonne === personId);
+      setDraftPerson({ ...person });
+  };
+
+  const saveChanges = async (id) => {
+      try {
+          await personnesService.updateUser(id, draftPerson);
+          setPeople(people.map(personne => personne.idPersonne === id ? { ...personne, ...draftPerson } : personne));
+          setEditingPersonId(null);
+      } catch (error) {
+          console.error("There was an error updating the ticket!", error);
+      }
+  };
 
     const handleDeletePerson = async (personId) => {
       try {
