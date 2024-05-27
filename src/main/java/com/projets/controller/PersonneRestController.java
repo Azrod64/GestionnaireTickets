@@ -25,10 +25,15 @@ import com.projets.service.VolumeHoraireService;
 
 @RestController
 public class PersonneRestController {
+	// Injection des dépendances nécessaires
 	@Autowired PersonneRepository personneRepository;
 	@Autowired PersonneService personneService;
 	@Autowired VolumeHoraireService volumeHoraireService;
 	
+	/**
+     * Récupère toutes les personnes de la base de données.
+     * @return une liste de PersonneDTO représentant toutes les personnes.
+     */
 	@CrossOrigin(origins = "http://localhost:3000")
     @GetMapping("/personne")
     public List<PersonneDTO> getPersonnes() {
@@ -37,7 +42,8 @@ public class PersonneRestController {
                         .map(this::convertToDTO)
                         .collect(Collectors.toList());
     }
-
+	
+    // Méthode privée pour convertir un objet Personne en PersonneDTO
     private PersonneDTO convertToDTO(Personne personne) {
         if (personne instanceof Ingenieur) {
             Ingenieur ingenieur = (Ingenieur) personne;
@@ -53,27 +59,42 @@ public class PersonneRestController {
         }
     }
 	
+    /**
+     * Crée un nouveau technicien à partir des données fournies dans le corps de la requête.
+     * @param bodyTechnicien les données du technicien à créer.
+     * @return l'entité PersonneDTO représentant le technicien créé.
+     */
 	@CrossOrigin(origins = "http://localhost:3000")
     @PostMapping("/createUser/1")
     public ResponseEntity<PersonneDTO> createUser(@RequestBody Technicien bodyTechnicien) {
-
+		
         Technicien technicien = new Technicien();
+        
+        // Initialise les attributs du technicien avec les valeurs de bodyTechnicien
         technicien.setNom(bodyTechnicien.getNom());
         technicien.setPrenom(bodyTechnicien.getPrenom());
         technicien.setEmail(bodyTechnicien.getEmail());
         technicien.setMdp(bodyTechnicien.getMdp());
         technicien.setCompetences(bodyTechnicien.getCompetences()); 
 
+        	// Sauvegarde le technicien dans la base de données et retourne le DTO correspondant
         Technicien savedTechnicien = personneService.createTechnicien(technicien);
         return ResponseEntity.ok(convertToDTO(savedTechnicien));
              
     }
 	
+	/**
+     * Crée un nouvel ingénieur à partir des données fournies dans le corps de la requête.
+     * @param bodyIngenieur les données de l'ingénieur à créer.
+     * @return l'entité PersonneDTO représentant l'ingénieur créé.
+     */
 	@CrossOrigin(origins = "http://localhost:3000")
     @PostMapping("/createUser/0")
     public ResponseEntity<PersonneDTO> createUser(@RequestBody Ingenieur bodyIngenieur) {
 
 		Ingenieur ingenieur = new Ingenieur();
+		
+		// Initialise les attributs de l'ingénieur avec les valeurs de bodyIngenieur
 		ingenieur.setNom(bodyIngenieur.getNom());
 		ingenieur.setPrenom(bodyIngenieur.getPrenom());
 		ingenieur.setEmail(bodyIngenieur.getEmail());
@@ -81,18 +102,26 @@ public class PersonneRestController {
 		ingenieur.setQualifications(bodyIngenieur.getQualifications());
 		ingenieur.setNbProjet(bodyIngenieur.getNbProjet());
 
+		// Sauvegarde l'ingénieur dans la base de données et retourne le DTO correspondant
 		Ingenieur savedIngenieur = personneService.createIngenieur(ingenieur);
         return ResponseEntity.ok(convertToDTO(savedIngenieur));
              
     }
 	
+	/**
+     * Met à jour les détails d'une personne identifiée par son ID avec les données fournies.
+     * @param id l'identifiant de la personne à mettre à jour.
+     * @param personneDTO les nouvelles données de la personne.
+     * @return l'entité PersonneDTO mise à jour.
+     */
 	@CrossOrigin(origins = "http://localhost:3000")
 	@PutMapping("/personne/{id}")
 	public ResponseEntity<PersonneDTO> updatePersonne(@PathVariable int id, @RequestBody PersonneDTO personneDTO) {
-	    // Chercher la personne par ID
+	    
+		// Chercher la personne par ID
 	    Optional<Personne> optionalPersonne = personneRepository.findById(id);
 
-	    // Si l'optional est vide, retourner une réponse 404
+	    // Si l'optional est vide, retourne une réponse 404
 	    if (!optionalPersonne.isPresent()) {
 	        return ResponseEntity.status(404).body(null);
 	    }
@@ -120,10 +149,15 @@ public class PersonneRestController {
 	        return ResponseEntity.ok(convertToDTO(updatedTechnicien));
 	    }
 
-	    // Si ni Ingenieur ni Technicien ne sont mises à jour
-	    return ResponseEntity.status(400).body(null); // Retourner une réponse 400 Bad Request
+	    // Si ni Ingenieur ni Technicien ne sont mises à jour, retourne une réponse 400 Bad Request
+	    return ResponseEntity.status(400).body(null); 
 	}
 	
+	/**
+     * Supprime une personne identifiée par son ID.
+     * @param id l'identifiant de la personne à supprimer.
+     * @return une réponse vide avec un statut 204 No Content.
+     */
 	@CrossOrigin(origins = "http://localhost:3000")
 	@DeleteMapping("/personne/{id}")
 	public ResponseEntity<Void> deletePersonne(@PathVariable("id") int id ) {
