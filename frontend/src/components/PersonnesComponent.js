@@ -11,7 +11,7 @@ const PersonnesComponent = () => {
         mdp: '',
         nom: '',
         prenom: '',
-        role: 'ingenieur' 
+        role: 'ingenieur'
       });
 
     //   useEffect(() => {
