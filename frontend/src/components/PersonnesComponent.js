@@ -15,7 +15,7 @@ const PersonnesComponent = () => {
         prenom: '',
         role: 'ingenieur',
         qualifications: '',
-        projets: '',
+        nbProjet: '',
         competences: ''
     });
 
@@ -41,34 +41,53 @@ const PersonnesComponent = () => {
     };
 
     const handleSubmit = async (e) => {
-        e.preventDefault();
-        const newPerson = {
-            email: formData.email,
-            nom: formData.nom,
-            prenom: formData.prenom,
-            role: formData.role,
-            qualifications: formData.role === 'ingenieur' ? formData.qualifications : '',
-            projets: formData.role === 'ingenieur' ? formData.projets : '',
-            competences: formData.role === 'technicien' ? formData.competences : ''
-        };
-
-        try {
-            const createdPerson = await personnesService.createUser(newPerson, formData.role);
-            setPeople([...people, createdPerson]);
-            setFormData({
-                email: '',
-                mdp: '',
-                nom: '',
-                prenom: '',
-                role: 'ingenieur',
-                qualifications: '',
-                projets: '',
-                competences: ''
-            });
-        } catch (err) {
-            setError(err.message);
-        }
-    };
+      e.preventDefault();
+      let newPerson = {
+          email: formData.email,
+          nom: formData.nom,
+          prenom: formData.prenom,
+          role: formData.role, 
+          qualifications: formData.qualifications,
+          nbProjet: formData.nbProjet,
+          competences: formData.competences,
+          mdp: formData.mdp
+      };
+  
+      if (formData.role === 'ingenieur') {
+          newPerson = {
+              ...newPerson,
+              qualifications: formData.qualifications,
+              nbProjet: formData.nbProjet
+          };
+      } else if (formData.role === 'technicien') {
+          newPerson = {
+              ...newPerson,
+              competences: formData.competences
+          };
+      }
+  
+      const trueRole = formData.role;
+      const { role, ...personToSend } = newPerson;
+  
+      try {
+          console.log(personToSend); 
+          const createdPerson = await personnesService.createUser(personToSend, trueRole);
+          setPeople([...people, createdPerson]);
+          setFormData({
+              email: '',
+              mdp: '',
+              nom: '',
+              prenom: '',
+              role: 'ingenieur',
+              qualifications: '',
+              nbProjet: '',
+              competences: ''
+          });
+      } catch (err) {
+          setError(err.message);
+      }
+  };
+  
 
     const toggleMenu = () => {
         setMenuOpen(!menuOpen);
@@ -162,12 +181,12 @@ const PersonnesComponent = () => {
                             value={formData.qualifications}
                             onChange={handleChange}
                         />
-                        <label htmlFor="projets">Nombre de projets à réaliser:</label>
+                        <label htmlFor="nbProjet">Nombre de nbProjet à réaliser:</label>
                         <input
                             type="number"
-                            id="projets"
-                            name="projets"
-                            value={formData.projets}
+                            id="nbProjet"
+                            name="nbProjet"
+                            value={formData.nbProjet}
                             onChange={handleChange}
                         />
                     </>
