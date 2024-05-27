@@ -13,7 +13,6 @@ const createUser = async (user, type) => {
         if (!response.ok) {
             throw new Error('Network response was not ok ' + response.statusText);
         }
-        return await response.json();  // Assuming the server returns the created user object
     } catch (error) {
         console.error("There was an error creating the user!", error);
         throw error;
@@ -34,7 +33,42 @@ const getPersonnes = async () => {
     }
 };
 
+const deleteUser = async (id) => {
+    try {
+        const response = await fetch(`${BASE_URL}/personne/${id}`, {
+            method: 'DELETE',
+        });
+        if (!response.ok) {
+            throw new Error('Network response was not ok ' + response.statusText);
+        }
+    } catch (error) {
+        console.error("There was an error deleting the person!", error);
+        throw error;
+    }
+};
+
+const updateUser = async (id, updatedUser) => {
+    try {
+        const response = await fetch(`${BASE_URL}/personne/${id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(updatedUser),
+        });
+        if (!response.ok) {
+            throw new Error('Network response was not ok ' + response.statusText);
+        }
+        return await response.json();
+    } catch (error) {
+        console.error("There was an error updating the ticket!", error);
+        throw error;
+    }
+};
+
 export default {
     createUser,
-    getPersonnes
+    getPersonnes,
+    deleteUser,
+    updateUser
 };
