@@ -35,5 +35,6 @@ const getPersonnes = async () => {
 };
 
 export default {
-    createUser
+    createUser,
+    getPersonnes
 };
