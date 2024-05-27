@@ -26,7 +26,6 @@ public class PersonneRestController {
 	@Autowired PersonneRepository personneRepository;
 	@Autowired PersonneService personneService;
 	@Autowired VolumeHoraireService volumeHoraireService;
-	//deb
 	
 	@CrossOrigin(origins = "http://localhost:3000")
     @GetMapping("/personne")
@@ -52,13 +51,9 @@ public class PersonneRestController {
         }
     }
 	
-	
-	
-	
-	// fin
 	@CrossOrigin(origins = "http://localhost:3000")
     @PostMapping("/createUser/1")
-    public String createUser(@RequestBody Technicien bodyTechnicien) {
+    public ResponseEntity<PersonneDTO> createUser(@RequestBody Technicien bodyTechnicien) {
 
         Technicien technicien = new Technicien();
         technicien.setNom(bodyTechnicien.getNom());
@@ -66,14 +61,15 @@ public class PersonneRestController {
         technicien.setEmail(bodyTechnicien.getEmail());
         technicien.setMdp(bodyTechnicien.getMdp());
         technicien.setCompetences(bodyTechnicien.getCompetences()); 
-        personneService.createTechnicien(technicien);
-        return "Technicien created successfully";
+
+        Technicien savedTechnicien = personneService.createTechnicien(technicien);
+        return ResponseEntity.ok(convertToDTO(savedTechnicien));
              
     }
 	
 	@CrossOrigin(origins = "http://localhost:3000")
     @PostMapping("/createUser/0")
-    public String createUser(@RequestBody Ingenieur bodyIngenieur) {
+    public ResponseEntity<PersonneDTO> createUser(@RequestBody Ingenieur bodyIngenieur) {
 
 		Ingenieur ingenieur = new Ingenieur();
 		ingenieur.setNom(bodyIngenieur.getNom());
@@ -82,8 +78,9 @@ public class PersonneRestController {
 		ingenieur.setMdp(bodyIngenieur.getMdp());
 		ingenieur.setQualifications(bodyIngenieur.getQualifications());
 		ingenieur.setNbProjet(bodyIngenieur.getNbProjet());
-        personneService.createIngenieur(ingenieur);
-        return "Ingenieur created successfully";
+
+		Ingenieur savedIngenieur = personneService.createIngenieur(ingenieur);
+        return ResponseEntity.ok(convertToDTO(savedIngenieur));
              
     }
 	
