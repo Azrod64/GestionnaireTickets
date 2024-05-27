@@ -13,6 +13,7 @@ const createUser = async (user, type) => {
         if (!response.ok) {
             throw new Error('Network response was not ok ' + response.statusText);
         }
+        return await response.json();
     } catch (error) {
         console.error("There was an error creating the user!", error);
         throw error;

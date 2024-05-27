@@ -70,7 +70,6 @@ const PersonnesComponent = () => {
       const { role, ...personToSend } = newPerson;
   
       try {
-          console.log(personToSend); 
           const createdPerson = await personnesService.createUser(personToSend, trueRole);
           setPeople([...people, createdPerson]);
           setFormData({
@@ -100,6 +99,12 @@ const PersonnesComponent = () => {
     };
 
     const handleDeletePerson = async (personId) => {
+      try {
+        await personnesService.deleteUser(personId);
+        setPeople(people.filter(personne => personne.idPersonne !== personId));
+      } catch (err) {
+          setError(err.message);
+      }
     };
 
     const handleDraftChange = (e) => {
