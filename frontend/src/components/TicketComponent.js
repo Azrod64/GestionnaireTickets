@@ -106,48 +106,59 @@
                     
                     
                 </div>
-
                 <form id="TicketCreation" onSubmit={handleCreateTicket}>
-                    <h2>Créer un Ticket</h2>
-                    <input
-                        type="text"
-                        placeholder="Description"
-                        value={newTicket.description}
-                        onChange={(e) => setNewTicket({ ...newTicket, description: e.target.value })}
-                        required="required"
-                    />
-                    <input
-                        type="text"
-                        placeholder="Service concerné"
-                        value={newTicket.serviceDedie}
-                        onChange={(e) => setNewTicket({ ...newTicket, serviceDedie: e.target.value })}
-                        required="required"
-                    />
-                    <input
-                        type="text"
-                        placeholder="Nom du client"
-                        value={newTicket.nomClient}
-                        onChange={(e) => setNewTicket({ ...newTicket, nomClient: e.target.value })}
-                        required="required"
-                    />
-                    <input
-                        type="text"
-                        placeholder="Genre"
-                        value={newTicket.genreProblem}
-                        onChange={(e) => setNewTicket({ ...newTicket, genreProblem: e.target.value })}
-                        required="required"
-                    />
-                    {additionalInputs.map((input, index) => (
+    <h2>Créer un Ticket</h2>
+    <label htmlFor="description">Description:</label>
+    <input
+        type="text"
+        id="description"
+        placeholder="Description"
+        value={newTicket.description}
+        onChange={(e) => setNewTicket({ ...newTicket, description: e.target.value })}
+        required="required"
+    />
+    <label htmlFor="serviceDedie">Service concerné:</label>
+    <input
+        type="text"
+        id="serviceDedie"
+        placeholder="Service concerné"
+        value={newTicket.serviceDedie}
+        onChange={(e) => setNewTicket({ ...newTicket, serviceDedie: e.target.value })}
+        required="required"
+    />
+    <label htmlFor="nomClient">Nom du client:</label>
+    <input
+        type="text"
+        id="nomClient"
+        placeholder="Nom du client"
+        value={newTicket.nomClient}
+        onChange={(e) => setNewTicket({ ...newTicket, nomClient: e.target.value })}
+        required="required"
+    />
+    <label htmlFor="genreProblem">Genre:</label>
+    <input
+        type="text"
+        id="genreProblem"
+        placeholder="Genre"
+        value={newTicket.genreProblem}
+        onChange={(e) => setNewTicket({ ...newTicket, genreProblem: e.target.value })}
+        required="required"
+    />
+    {additionalInputs.map((input, index) => (
         <div id ="AddedInputs" key={index}>
+            <label htmlFor={`idPersonne${index}`}>Personne Associée:</label>
             <input
                 type="text"
+                id={`idPersonne${index}`}
                 placeholder="Personne Associée"
                 value={input.idPersonne}
                 onChange={(e) => handleAdditionalInputChange(e, index, 'idPersonne')}
                 required="required"
             />
+            <label htmlFor={`volHoraire${index}`}>Volume horaire:</label>
             <input
                 type="text"
+                id={`volHoraire${index}`}
                 placeholder="Volume horaire"
                 value={input.volHoraire}
                 onChange={(e) => handleAdditionalInputChange(e, index, 'volHoraire')}
@@ -156,9 +167,10 @@
             <button id="remove" type="button" onClick={() => handleRemoveInput(index)}>-</button>
         </div>
     ))}
-                    <button type="button" id="add"  onClick={handleAddInputs}> + </button>
-                    <button type="submit" id="submit">Créer</button>
-                </form>
+    <button type="button" id="add" onClick={handleAddInputs}> + </button>
+    <button type="submit" id="submit">Créer</button>
+</form>
+
 
                 <div id="table">
                     <table>
@@ -235,7 +247,10 @@
             </td>
             <td>
                 {editingTicketId === ticket.idTicket ? (
-                    <button onClick={() => saveChanges(ticket.idTicket)}>Save</button>
+                    <img style={{ width: '1.3em', margin: '0 5px 0 0' }}
+                    src={`${process.env.PUBLIC_URL}/images/validate.png`}
+                    alt="modify"onClick={() => saveChanges(ticket.idTicket)}/>
+                        
                 ) : (
                     <img
                         style={{ width: '1.3em', margin: '0 5px 0 0' }}

@@ -1,9 +1,11 @@
-import React,  { useState } from 'react';
+import React,  { useState, useEffect } from 'react';
+import personnesService from '../services/PersonneService';
 import './PersonnesComponent.css';
 
 const PersonnesComponent = () => {
     const [people, setPeople] = useState([]);
     const [menuOpen, setMenuOpen] = useState(false);
+    const [error, setError] = useState(null);
     const [formData, setFormData] = useState({
         email: '',
         mdp: '',
@@ -11,6 +13,19 @@ const PersonnesComponent = () => {
         prenom: '',
         role: 'ingenieur'
       });
+
+    //   useEffect(() => {
+    //     const fetchPeople = async () => {
+    //         try {
+    //             const fetchedPeople = await personnesService.getPeople();
+    //             setPeople(fetchedPeople);
+    //         } catch (err) {
+    //             setError(err.message);
+    //         }
+    //     };
+
+    //     fetchPeople();
+    // }, []);
 
       const handleChange = (e) => {
         const { name, value } = e.target;
@@ -22,7 +37,21 @@ const PersonnesComponent = () => {
     
       const handleSubmit = (e) => {
         e.preventDefault();
-        
+        const newPerson = {
+            email: formData.email,
+            nom: formData.nom,
+            prenom: formData.prenom,
+            role: formData.role
+        };
+        setPeople([...people, newPerson]);
+
+        setFormData({
+            email: '',
+            mdp: '',
+            nom: '',
+            prenom: '',
+            role: 'ingenieur'
+        });
       };
       const toggleMenu = () => {
         setMenuOpen(!menuOpen);
@@ -92,15 +121,17 @@ const PersonnesComponent = () => {
       <table>
         <thead>
           <tr>
+            <th>Id</th>
             <th>Email</th>
             <th>Nom</th>
             <th>Prénom</th>
             <th>Rôle</th>
+            <th id="icons">Actions</th>
           </tr>
         </thead>
         <tbody>
           {people.map((person) => (
-            <tr key={person.email}>
+            <tr key={person.id_personne}>
               <td>{person.email}</td>
               <td>{person.nom}</td>
               <td>{person.prenom}</td>
