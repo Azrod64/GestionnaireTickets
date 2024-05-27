@@ -28,29 +28,51 @@ import jakarta.transaction.Transactional;
 
 @RestController
 public class TicketRestController {
+	
+	// Injection des dépendances nécessaires
 	@Autowired TicketRepository ticketRepository;
 	@Autowired TicketService ticketService;
 	@Autowired PersonneRepository personneRepository;
 	@Autowired VolumeHoraireRepository volumeHoraireRepository;
 	
+	/** 
+     * Récupère tous les tickets de la base de données.
+     * @return une liste de tous les tickets.
+     */
 	@CrossOrigin(origins = "http://localhost:3000")
 	@GetMapping("/ticket")
 	public List<Ticket> getTickets() {
 		return ticketRepository.findAllTickets();
 	}
 	
+	/**
+     * Crée un nouveau ticket depuis les données fournies dans le corps de la requête.
+     * @param ticketDTO les données du ticket à créer.
+     * @return l'entité Ticket créée.
+     */
 	@CrossOrigin(origins = "http://localhost:3000")
 	@PostMapping("/ticket")
     public ResponseEntity<Ticket> addTicket(@RequestBody TicketDTO ticketDTO) {
         return ResponseEntity.ok(saveOrUpdateTicket(null, ticketDTO));
     }
 	
+	/**
+     * Met à jour un ticket existant identifié par son ID avec les données fournies.
+     * @param id l'identifiant du ticket à mettre à jour.
+     * @param ticketDTO les nouvelles données du ticket.
+     * @return l'entité Ticket mise à jour.
+     */
 	@CrossOrigin(origins = "http://localhost:3000")
     @PutMapping("/ticket/{id}")
     public ResponseEntity<Ticket> updateTicket(@PathVariable int id, @RequestBody TicketDTO ticketDTO) {
         return ResponseEntity.ok(saveOrUpdateTicket(id, ticketDTO));
     }
 	
+	/**
+     * Supprime un ticket identifié par son ID.
+     * @param id l'identifiant du ticket à supprimer.
+     * @return une réponse vide avec un statut 204 No Content.
+     */
 	@CrossOrigin(origins = "http://localhost:3000")
 	@DeleteMapping("/ticket/{id}")
 	public ResponseEntity<Void> deleteTicket(@PathVariable("id") int id ) {
@@ -58,6 +80,12 @@ public class TicketRestController {
 	  return ResponseEntity.noContent().build();
 	}
 	
+	/**
+     * Sauvegarde ou met à jour un ticket en fonction de l'ID passé. Si l'ID est nul, un nouveau ticket est créé. Sinon, le ticket existant est mis à jour.
+     * @param id l'identifiant du ticket (peut être null pour créer un nouveau ticket).
+     * @param ticketDTO les données du ticket.
+     * @return le ticket sauvegardé ou mis à jour.
+     */
 	@Transactional
 	private Ticket saveOrUpdateTicket(Integer id, TicketDTO ticketDTO) {
 	    Ticket ticket;
