@@ -94,19 +94,12 @@ const PersonnesComponent = () => {
     };
 
     const editPerson = (personId) => {
-        const personToEdit = people.find(person => person.idPersonne === personId);
-        setDraftPerson({ ...personToEdit });
-        setEditingPersonId(personId);
     };
 
     const saveChanges = async (personId) => {
-
-        setEditingPersonId(null);
     };
 
     const handleDeletePerson = async (personId) => {
-
-        setPeople(people.filter(person => person.idPersonne !== personId));
     };
 
     const handleDraftChange = (e) => {
@@ -222,10 +215,10 @@ const PersonnesComponent = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {people.map((person) => (
-                            <tr key={person.idPersonne}>
-                                <td>{person.idPersonne}</td>
-                                <td>{editingPersonId === person.idPersonne ? (
+                        {people.map((people) => (
+                            <tr key={people.idPersonne}>
+                                <td>{people.idPersonne}</td>
+                                <td>{editingPersonId === people.idPersonne ? (
                                     <input
                                         type="email"
                                         name="email"
@@ -233,9 +226,9 @@ const PersonnesComponent = () => {
                                         onChange={handleDraftChange}
                                     />
                                 ) : (
-                                    person.email
+                                    people.email
                                 )}</td>
-                                <td>{editingPersonId === person.idPersonne ? (
+                                <td>{editingPersonId === people.idPersonne ? (
                                     <input
                                         type="text"
                                         name="nom"
@@ -243,9 +236,9 @@ const PersonnesComponent = () => {
                                         onChange={handleDraftChange}
                                     />
                                 ) : (
-                                    person.nom
+                                    people.nom
                                 )}</td>
-                                <td>{editingPersonId === person.idPersonne ? (
+                                <td>{editingPersonId === people.idPersonne ? (
                                     <input
                                         type="text"
                                         name="prenom"
@@ -253,30 +246,30 @@ const PersonnesComponent = () => {
                                         onChange={handleDraftChange}
                                     />
                                 ) : (
-                                    person.prenom
+                                    people.prenom
                                 )}</td>
                                 
                                 <td>
-                                    {editingPersonId === person.idPersonne ? (
+                                    {editingPersonId === people.idPersonne ? (
                                         <img
                                             style={{ width: '1.3em', margin: '0 5px 0 0' }}
                                             src={`${process.env.PUBLIC_URL}/images/validate.png`}
                                             alt="modify"
-                                            onClick={() => saveChanges(person.idPersonne)}
+                                            onClick={() => saveChanges(people.idPersonne)}
                                         />
                                     ) : (
                                         <img
                                             style={{ width: '1.3em', margin: '0 5px 0 0' }}
                                             src={`${process.env.PUBLIC_URL}/images/modify.png`}
                                             alt="modify"
-                                            onClick={() => editPerson(person.idPersonne)}
+                                            onClick={() => editPerson(people.idPersonne)}
                                         />
                                     )}
                                     <img
                                         style={{ width: '1.3em' }}
                                         src={`${process.env.PUBLIC_URL}/images/trash.png`}
                                         alt="remove"
-                                        onClick={() => handleDeletePerson(person.idPersonne)}
+                                        onClick={() => handleDeletePerson(people.idPersonne)}
                                     />
                                 </td>
                             </tr>
