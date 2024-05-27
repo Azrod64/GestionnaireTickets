@@ -169,7 +169,7 @@
                                 <th>Service concerné</th>
                                 <th>Nom du client</th>
                                 <th>Type de problème</th>
-                                <th id="icons">Actions</th>
+                                <th id="icons">Statut</th>
                             </tr>
                         </thead>
                         <tbody id="tickets">
