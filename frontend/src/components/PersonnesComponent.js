@@ -190,7 +190,7 @@ const PersonnesComponent = () => {
                             value={formData.qualifications}
                             onChange={handleChange}
                         />
-                        <label htmlFor="nbProjet">Nombre de nbProjet à réaliser:</label>
+                        <label htmlFor="nbProjet">Nombre de projets à réaliser:</label>
                         <input
                             type="number"
                             id="nbProjet"
