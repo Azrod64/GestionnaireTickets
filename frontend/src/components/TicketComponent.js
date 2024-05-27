@@ -159,16 +159,17 @@
         <div id ="AddedInputs" key={index}>
             <label htmlFor={`idPersonne${index}`}>Personne Associée:</label>
             <select
-                
                 id={`idPersonne${index}`}
-                placeholder="Personne Associée"
                 value={input.idPersonne}
                 onChange={(e) => handleAdditionalInputChange(e, index, 'idPersonne')}
                 required="required"
-            > <option value="">Select your option</option>
-            <option value="1">ZOUBABY</option>
-            <option value="2">JEZAN</option>
+            >
+                <option value="">Select your option</option>
+                {personnes.map(personne => (
+                    <option key={personne.id} value={personne.id}>{personne.prenom} {personne.nom}</option>
+                ))}
             </select>
+
             <label htmlFor={`volHoraire${index}`}>Volume horaire:</label>
             <input
                 type="text"
