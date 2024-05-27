@@ -136,25 +136,32 @@
         required="required"
     />
     <label htmlFor="genreProblem">Genre:</label>
-    <input
-        type="text"
+    <select
+        
         id="genreProblem"
         placeholder="Genre"
         value={newTicket.genreProblem}
         onChange={(e) => setNewTicket({ ...newTicket, genreProblem: e.target.value })}
         required="required"
-    />
+    >
+        <option value="">Select your option</option>
+        <option value="Hardware">Hardware</option>
+        <option value="Software">Software</option>
+    </select>
     {additionalInputs.map((input, index) => (
         <div id ="AddedInputs" key={index}>
             <label htmlFor={`idPersonne${index}`}>Personne Associée:</label>
-            <input
-                type="text"
+            <select
+                
                 id={`idPersonne${index}`}
                 placeholder="Personne Associée"
                 value={input.idPersonne}
                 onChange={(e) => handleAdditionalInputChange(e, index, 'idPersonne')}
                 required="required"
-            />
+            > <option value="">Select your option</option>
+            <option value="1">ZOUBABY</option>
+            <option value="2">JEZAN</option>
+            </select>
             <label htmlFor={`volHoraire${index}`}>Volume horaire:</label>
             <input
                 type="text"
