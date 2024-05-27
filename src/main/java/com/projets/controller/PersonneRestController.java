@@ -1,6 +1,7 @@
 package com.projets.controller;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -83,6 +85,44 @@ public class PersonneRestController {
         return ResponseEntity.ok(convertToDTO(savedIngenieur));
              
     }
+	
+	@CrossOrigin(origins = "http://localhost:3000")
+	@PutMapping("/personne/{id}")
+	public ResponseEntity<PersonneDTO> updatePersonne(@PathVariable int id, @RequestBody PersonneDTO personneDTO) {
+	    // Chercher la personne par ID
+	    Optional<Personne> optionalPersonne = personneRepository.findById(id);
+
+	    // Si l'optional est vide, retourner une réponse 404
+	    if (!optionalPersonne.isPresent()) {
+	        return ResponseEntity.status(404).body(null);
+	    }
+	 
+	    // Personne trouvée, mise à jour des attributs
+	    Personne personne = optionalPersonne.get();
+
+	    if (personne instanceof Ingenieur && personneDTO.getQualifications() != null) {
+	        Ingenieur ingenieur = (Ingenieur) personne;
+	        ingenieur.setNom(personneDTO.getNom());
+	        ingenieur.setPrenom(personneDTO.getPrenom());
+	        ingenieur.setEmail(personneDTO.getEmail());
+	        ingenieur.setQualifications(personneDTO.getQualifications());
+	        ingenieur.setNbProjet(personneDTO.getNbProjet());
+	        Ingenieur updatedIngenieur = personneService.createIngenieur(ingenieur);
+	        return ResponseEntity.ok(convertToDTO(updatedIngenieur));
+
+	    } else if (personne instanceof Technicien && personneDTO.getCompetences() != null) {
+	        Technicien technicien = (Technicien) personne;
+	        technicien.setNom(personneDTO.getNom());
+	        technicien.setPrenom(personneDTO.getPrenom());
+	        technicien.setEmail(personneDTO.getEmail());
+	        technicien.setCompetences(personneDTO.getCompetences());
+	        Technicien updatedTechnicien = personneService.createTechnicien(technicien);
+	        return ResponseEntity.ok(convertToDTO(updatedTechnicien));
+	    }
+
+	    // Si ni Ingenieur ni Technicien ne sont mises à jour
+	    return ResponseEntity.status(400).body(null); // Retourner une réponse 400 Bad Request
+	}
 	
 	@CrossOrigin(origins = "http://localhost:3000")
 	@DeleteMapping("/personne/{id}")
