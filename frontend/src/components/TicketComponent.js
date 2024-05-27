@@ -7,7 +7,7 @@
     const TicketComponent = () => {
         const [tickets, setTickets] = useState([]);
         const [newTicket, setNewTicket] = useState({ description: '', genreProblem: '', nomClient: '', serviceDedie: '', statut: 0, volHoraire:[]});
-        const [additionalInputs, setAdditionalInputs] = useState([{ volHoraire: '', idPersonne: '' }]);
+        const [additionalInputs, setAdditionalInputs] = useState([{ volHoraire: null, idPersonne: null }]);
         const [menuOpen, setMenuOpen] = useState(false);
         const [error, setError] = useState(null);
         const [editingTicketId, setEditingTicketId] = useState(null);
@@ -42,20 +42,22 @@
                 const updatedTicket = await ticketService.createTicket(ticketToCreate);
                 setTickets(prevTickets => Array.isArray(prevTickets) ? prevTickets.concat(updatedTicket) : [updatedTicket]);
                 setNewTicket({ description: '', genreProblem: '', nomClient: '', serviceDedie: '', statut: 0, volHoraire:[]});
-                setAdditionalInputs([{ volHoraire: '', idPersonne: '' }]);
+                setAdditionalInputs([{ volHoraire: null, idPersonne: null }]);
             } catch (err) {
                 setError(err.message); 
             }
         };
 
         const handleAddInputs  =() =>{
-            setAdditionalInputs([...additionalInputs, { volHoraire: '', idPersonne: '' }]);
+            setAdditionalInputs([...additionalInputs, { volHoraire: null, idPersonne: null }]);
         }
 
         const handleAdditionalInputChange = (e, index, key) => {
             const newInputs = [...additionalInputs];
-            const value = e.target.value;
-            newInputs[index][key] = (key === 'volHoraire' || key === 'idPersonne') ? parseInt(value, 10) : value;
+            // const value = 
+            newInputs[index][key] = e.target.value;
+            // (key === 'volHoraire' || key === 'idPersonne') ? parseInt(value, 10) : value;
+            console.log(newInputs);
             setAdditionalInputs(newInputs);
         };
         
@@ -160,15 +162,17 @@
             <label htmlFor={`idPersonne${index}`}>Personne Associée:</label>
             <select
                 id={`idPersonne${index}`}
-                value={input.idPersonne}
                 onChange={(e) => handleAdditionalInputChange(e, index, 'idPersonne')}
                 required="required"
             >
                 <option value="">Select your option</option>
                 {personnes.map(personne => (
-                    <option key={personne.id} value={personne.id}>{personne.prenom} {personne.nom}</option>
+                    <option key={personne.idPersonne} value={personne.idPersonne}>
+                        {personne.prenom} {personne.nom}
+                    </option>
                 ))}
             </select>
+
 
             <label htmlFor={`volHoraire${index}`}>Volume horaire:</label>
             <input
