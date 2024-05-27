@@ -8,6 +8,7 @@ body{
     margin: 0;
     background-color: rgb(242, 242, 242);
     justify-content: center;
+    overflow: visible;
 }
 
 h1{

@@ -1,24 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import './Popup.css';
-import personneService from '../services/PersonneService';
 
-const Popup = ({ ticket, onClose }) => {
-    const [personnes, setPersonnes] = useState([]);
-    const [error, setError] = useState(null);
-
-    useEffect(() => {
-        const fetchPersonnes = async () => {
-            try {
-                const personnesData = await personneService.getPersonnes();
-                setPersonnes(personnesData);
-            } catch (err) {
-                setError("Erreur lors du chargement des données des personnes: " + err.message);
-            }
-        };
-
-        fetchPersonnes();
-    }, []);
-
+const Popup = ({ ticket, personnes, onClose }) => {
     return (
         <div className="popup">
             <div className="popup-inner">
@@ -44,7 +27,6 @@ const Popup = ({ ticket, onClose }) => {
                         })}
                     </tbody>
                 </table>
-                {error && <p style={{ color: 'red' }}>{error}</p>}
             </div>
         </div>
     );

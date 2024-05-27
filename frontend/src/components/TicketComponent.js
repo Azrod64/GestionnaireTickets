@@ -50,7 +50,7 @@ const TicketComponent = () => {
 
     const handleAddInputs = () => {
         setAdditionalInputs([...additionalInputs, { volHoraire: null, idPersonne: null }]);
-    }
+    };
 
     const handleAdditionalInputChange = (e, index, key) => {
         const newInputs = [...additionalInputs];
@@ -101,12 +101,10 @@ const TicketComponent = () => {
         setSelectedTicket(null);
     };
 
-    
-
     return (
         <div>
             <div className={`burger-menu ${menuOpen ? 'open' : ''}`} onClick={toggleMenu}>
-                <div className="burger-menu-line"> </div>
+                <div className="burger-menu-line"></div>
                 <div className="burger-menu-line"></div>
                 <div className="burger-menu-line"></div>
             </div>
@@ -127,7 +125,7 @@ const TicketComponent = () => {
                     placeholder="Description"
                     value={newTicket.description}
                     onChange={(e) => setNewTicket({ ...newTicket, description: e.target.value })}
-                    required="required"
+                    required
                 />
                 <label htmlFor="serviceDedie">Service concerné:</label>
                 <input
@@ -136,7 +134,7 @@ const TicketComponent = () => {
                     placeholder="Service concerné"
                     value={newTicket.serviceDedie}
                     onChange={(e) => setNewTicket({ ...newTicket, serviceDedie: e.target.value })}
-                    required="required"
+                    required
                 />
                 <label htmlFor="nomClient">Nom du client:</label>
                 <input
@@ -145,7 +143,7 @@ const TicketComponent = () => {
                     placeholder="Nom du client"
                     value={newTicket.nomClient}
                     onChange={(e) => setNewTicket({ ...newTicket, nomClient: e.target.value })}
-                    required="required"
+                    required
                 />
                 <label htmlFor="genreProblem">Genre:</label>
                 <select
@@ -153,7 +151,7 @@ const TicketComponent = () => {
                     placeholder="Genre"
                     value={newTicket.genreProblem}
                     onChange={(e) => setNewTicket({ ...newTicket, genreProblem: e.target.value })}
-                    required="required"
+                    required
                 >
                     <option value="">Select your option</option>
                     <option value="Hardware">Hardware</option>
@@ -165,7 +163,7 @@ const TicketComponent = () => {
                         <select
                             id={`idPersonne${index}`}
                             onChange={(e) => handleAdditionalInputChange(e, index, 'idPersonne')}
-                            required="required"
+                            required
                         >
                             <option value="">Select your option</option>
                             {personnes.map(personne => (
@@ -181,7 +179,7 @@ const TicketComponent = () => {
                             placeholder="Volume horaire"
                             value={input.volHoraire}
                             onChange={(e) => handleAdditionalInputChange(e, index, 'volHoraire')}
-                            required="required"
+                            required
                         />
                         <button id="remove" type="button" onClick={() => handleRemoveInput(index)}>-</button>
                     </div>
