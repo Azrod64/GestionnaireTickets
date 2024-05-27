@@ -20,6 +20,20 @@ const createUser = async (user, type) => {
     }
 };
 
+const getPersonnes = async () => {
+    try {
+        const response = await fetch(`${BASE_URL}/personne`);
+        if (!response.ok) {
+            throw new Error('Network response was not ok ' + response.statusText);
+        }
+        console.log(response);
+        return await response.json();
+    } catch (error) {
+        console.error("There was an error fetching the tickets!", error);
+        throw error;
+    }
+};
+
 export default {
     createUser
 };

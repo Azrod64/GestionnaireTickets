@@ -1,5 +1,6 @@
     import React, { useState, useEffect } from 'react';
     import ticketService from '../services/TicketService';
+    import personneService from '../services/PersonneService';
     import './TicketComponent.css';
     
 
@@ -11,19 +12,25 @@
         const [error, setError] = useState(null);
         const [editingTicketId, setEditingTicketId] = useState(null);
         const [draftTicket, setDraftTicket] = useState({});
+        const [personnes, setPersonnes] = useState([]);
 
         useEffect(() => {
-            const fetchTickets = async () => {
+            const fetchData = async () => {
                 try {
-                    const fetchedTickets = await ticketService.getTickets();
+                    const [fetchedTickets, fetchedPersonnes] = await Promise.all([
+                        ticketService.getTickets(),
+                        personneService.getPersonnes()
+                    ]);
                     setTickets(fetchedTickets);
+                    setPersonnes(fetchedPersonnes);
                 } catch (err) {
-                    setError(err.message);
+                    setError("Erreur lors du chargement des données: " + err.message);
                 }
             };
-
-            fetchTickets();
+        
+            fetchData();
         }, []);
+        
 
         const handleCreateTicket = async (e) => {
             e.preventDefault();
