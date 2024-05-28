@@ -8,6 +8,8 @@ const PersonnesComponent = () => {
     const [error, setError] = useState(null);
     const [editingPersonId, setEditingPersonId] = useState(null);
     const [draftPerson, setDraftPerson] = useState({});
+    const [filter, setFilter] = useState('all');
+    
     const [formData, setFormData] = useState({
         email: '',
         mdp: '',
@@ -31,6 +33,14 @@ const PersonnesComponent = () => {
 
         fetchPeople();
     }, []);
+
+    const determinePersonType = (person) => {
+        if ( person.competences===null) {
+            return 'Ingénieur';
+        } else if (person.qualifications===null) {
+            return 'Technicien';
+        }
+    };
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -125,6 +135,13 @@ const PersonnesComponent = () => {
             [name]: value
         });
     };
+    
+    const filteredPeople = people.filter(person => {
+        if (filter === 'all') return true;
+        if (filter === 'technicien') return person.competences && !person.qualifications;
+        if (filter === 'ingenieur') return person.qualifications && !person.competences;
+    });
+    
 
     return (
         <div>
@@ -215,6 +232,14 @@ const PersonnesComponent = () => {
                 )}
 
                 <button id="submit" type="submit">Soumettre</button>
+                
+                <label htmlFor="filter">Filtre : </label>
+                <select id="filter" value={filter} onChange={e => setFilter(e.target.value)}>
+                    <option value="all">Aucun</option>
+                    <option value="technicien">Techniciens</option>
+                    <option value="ingenieur">Ingénieurs</option>
+                </select>
+
             </form>
 
             {error && <p style={{ color: 'red' }}>{error}</p>}
@@ -223,18 +248,24 @@ const PersonnesComponent = () => {
                 <table>
                     <thead>
                         <tr>
-                            <th>Id</th>
-                            <th>Email</th>
-                            <th>Nom</th>
-                            <th>Prénom</th>
-                            <th id="icons">Actions</th>
+                        <th>Id</th>
+                        <th>Email</th>
+                        <th>Nom</th>
+                        <th>Prénom</th>
+                        <th>Type</th>
+                        {filter === 'ingenieur' && <>
+                            <th>Qualifications</th>
+                            <th>Nombre de projets</th>
+                        </>}
+                        {filter === 'technicien' && <th>Compétences</th>}
+                        <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {people.map((people) => (
-                            <tr key={people.idPersonne}>
-                                <td>{people.idPersonne}</td>
-                                <td>{editingPersonId === people.idPersonne ? (
+                    {filteredPeople.map((person) => (
+                        <tr key={person.idPersonne}>
+                                <td>{person.idPersonne}</td>
+                                <td>{editingPersonId === person.idPersonne ? (
                                     <input
                                         type="email"
                                         name="email"
@@ -242,9 +273,9 @@ const PersonnesComponent = () => {
                                         onChange={handleDraftChange}
                                     />
                                 ) : (
-                                    people.email
+                                    person.email
                                 )}</td>
-                                <td>{editingPersonId === people.idPersonne ? (
+                                <td>{editingPersonId === person.idPersonne ? (
                                     <input
                                         type="text"
                                         name="nom"
@@ -252,9 +283,9 @@ const PersonnesComponent = () => {
                                         onChange={handleDraftChange}
                                     />
                                 ) : (
-                                    people.nom
+                                    person.nom
                                 )}</td>
-                                <td>{editingPersonId === people.idPersonne ? (
+                                <td>{editingPersonId === person.idPersonne ? (
                                     <input
                                         type="text"
                                         name="prenom"
@@ -262,23 +293,44 @@ const PersonnesComponent = () => {
                                         onChange={handleDraftChange}
                                     />
                                 ) : (
-                                    people.prenom
+                                    person.prenom
                                 )}</td>
-                                
+                                <td>{determinePersonType(person)}</td>
+        {filter === 'ingenieur' && (
+            <>
+                <td>{editingPersonId === person.idPersonne ? (
+                    <input type="text" name="qualifications" value={draftPerson.qualifications} onChange={handleDraftChange} />
+                ) : (
+                    person.qualifications
+                )}</td>
+                <td>{editingPersonId === person.idPersonne ? (
+                    <input type="number" name="nbProjet" value={draftPerson.nbProjet} onChange={handleDraftChange} />
+                ) : (
+                    person.nbProjet
+                )}</td>
+            </>
+        )}
+        {filter === 'technicien' && (
+            <td>{editingPersonId === person.idPersonne ? (
+                <input type="text" name="competences" value={draftPerson.competences} onChange={handleDraftChange} />
+            ) : (
+                person.competences
+            )}</td>
+        )}
                                 <td>
-                                    {editingPersonId === people.idPersonne ? (
+                                {editingPersonId === person.idPersonne ? (
                                         <img
                                             style={{ width: '1.3em', margin: '0 5px 0 0' }}
                                             src={`${process.env.PUBLIC_URL}/images/validate.png`}
                                             alt="modify"
-                                            onClick={() => saveChanges(people.idPersonne)}
+                                            onClick={() => saveChanges(person.idPersonne)}
                                         />
                                     ) : (
                                         <img
                                             style={{ width: '1.3em', margin: '0 5px 0 0' }}
                                             src={`${process.env.PUBLIC_URL}/images/modify.png`}
                                             alt="modify"
-                                            onClick={() => editPerson(people.idPersonne)}
+                                            onClick={() => editPerson(person.idPersonne)}
                                         />
                                     )}
                                     <img
@@ -298,3 +350,4 @@ const PersonnesComponent = () => {
 };
 
 export default PersonnesComponent;
+

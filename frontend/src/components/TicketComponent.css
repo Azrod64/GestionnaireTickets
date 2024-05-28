@@ -92,7 +92,9 @@ input:focus{
 }
 
 #table{
-    width: 90%;
+    overflow: auto;
+    min-width: 90%;
+    max-width: 90%;
     display: flex;
     margin: 0px auto 0px auto;
     border: solid 1px black;
@@ -226,4 +228,18 @@ tr:nth-child(2n){
 }
 label{
     margin: 0 0 0 10px;
+}
+
+select{
+    overflow: visible;
+
+    margin: 0 0 2px 2px;
+    width: 150px;
+    height: 40px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    appearance: none;
+    cursor: pointer;
 }

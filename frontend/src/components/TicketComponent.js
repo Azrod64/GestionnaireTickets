@@ -254,6 +254,7 @@ const TicketComponent = () => {
                             <th>Nom du client</th>
                             <th>Type de problème</th>
                             <th id="icons">Statut</th>
+                            <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody id="tickets">
@@ -294,12 +295,15 @@ const TicketComponent = () => {
                                     )}
                                 </td>
                                 <td>
-                                    {editingTicketId === ticket.idTicket ? (
-                                        <input
-                                            type="text"
+                                {editingTicketId === ticket.idTicket ? (
+                                        <select
                                             value={draftTicket.genreProblem}
                                             onChange={(e) => setDraftTicket({ ...draftTicket, genreProblem: e.target.value })}
-                                        />
+                                            required
+                                        >
+                                            <option value="Hardware">Hardware</option>
+                                            <option value="Software">Software</option>
+                                        </select>
                                     ) : (
                                         ticket.genreProblem
                                     )}
