@@ -31,6 +31,23 @@ const TicketComponent = () => {
 
         fetchData();
     }, []);
+    
+    const onUpdate = async (idTicket, volHoraire) => {
+        const ticketToUpdate = {
+            volHoraire: volHoraire.map(vh => ({
+                idPersonne: vh.id.idPersonne,
+                volHoraire: vh.volHoraire
+            }))
+        };
+    
+        try {
+            const response = await ticketService.updateTicket(idTicket, ticketToUpdate);
+            console.log("Ticket mis à jour avec succès:", response);
+            // Mettre à jour l'état local si nécessaire, par exemple, rafraîchir la liste des tickets
+        } catch (error) {
+            console.error("Erreur lors de la mise à jour du ticket:", error);
+        }
+    };
 
     const handleCreateTicket = async (e) => {
         e.preventDefault();
@@ -40,12 +57,14 @@ const TicketComponent = () => {
                 volHoraire: additionalInputs
             };
             const updatedTicket = await ticketService.createTicket(ticketToCreate);
+            const fetchedPersonnes = await personneService.getPersonnes(); 
             setTickets(prevTickets => Array.isArray(prevTickets) ? prevTickets.concat(updatedTicket) : [updatedTicket]);
+            setPersonnes(fetchedPersonnes); 
             setNewTicket({ description: '', genreProblem: '', nomClient: '', serviceDedie: '', statut: 0, volHoraire: [] });
             setAdditionalInputs([{ volHoraire: null, idPersonne: null }]);
         } catch (err) {
             setError(err.message);
-        }
+        }        
     };
 
     const handleAddInputs = () => {
@@ -93,7 +112,10 @@ const TicketComponent = () => {
         }
     };
 
-    const openPopup = (ticket) => {
+    const openPopup = (e, ticket) => {
+        if (e.target.tagName === 'IMG' || e.target.tagName === 'BUTTON' || editingTicketId !== null) {
+            return; 
+        }
         setSelectedTicket(ticket);
     };
 
@@ -202,7 +224,7 @@ const TicketComponent = () => {
                     </thead>
                     <tbody id="tickets">
                         {tickets.map((ticket) => (
-                            <tr key={ticket.idTicket} onClick={() => openPopup(ticket)}>
+                            <tr key={ticket.idTicket} onClick={(e) => openPopup(e, ticket)}>
                                 <td>{ticket.idTicket}</td>
                                 <td>
                                     {editingTicketId === ticket.idTicket ? (
@@ -288,8 +310,9 @@ const TicketComponent = () => {
             </div>
             {error && <p style={{ color: 'red' }}>{error}</p>}
             {selectedTicket && (
-                <Popup ticket={selectedTicket} personnes={personnes} onClose={handleClosePopup} />
-            )}
+            <Popup key={selectedTicket.idTicket} ticket={selectedTicket} personnes={personnes} onClose={handleClosePopup} onUpdate={onUpdate}/>
+        )}
+
         </div>
     );
 };
