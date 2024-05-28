@@ -7,7 +7,7 @@ import './TicketComponent.css';
 const TicketComponent = () => {
     const [tickets, setTickets] = useState([]);
     const [newTicket, setNewTicket] = useState({ description: '', genreProblem: '', nomClient: '', serviceDedie: '', statut: 0, volHoraire: [] });
-    const [additionalInputs, setAdditionalInputs] = useState([{ volHoraire: null, idPersonne: null }]);
+    const [additionalInputs, setAdditionalInputs] = useState([{ volHoraire: '', idPersonne: '' }]);
     const [menuOpen, setMenuOpen] = useState(false);
     const [error, setError] = useState(null);
     const [editingTicketId, setEditingTicketId] = useState(null);
@@ -33,7 +33,9 @@ const TicketComponent = () => {
     }, []);
     
     const onUpdate = async (idTicket, volHoraire) => {
+        const existingTicket = tickets.find(t => t.idTicket === idTicket);
         const ticketToUpdate = {
+            ...existingTicket,
             volHoraire: volHoraire.map(vh => ({
                 idPersonne: vh.id.idPersonne,
                 volHoraire: vh.volHoraire
@@ -41,9 +43,20 @@ const TicketComponent = () => {
         };
     
         try {
-            const response = await ticketService.updateTicket(idTicket, ticketToUpdate);
-            console.log("Ticket mis à jour avec succès:", response);
-            // Mettre à jour l'état local si nécessaire, par exemple, rafraîchir la liste des tickets
+            await ticketService.updateTicket(idTicket, ticketToUpdate);
+            const updatedVolHoraire = volHoraire.map(vh => ({
+                id: {
+                    idTicket: idTicket,
+                    idPersonne: vh.id.idPersonne
+                },
+                volHoraire: vh.volHoraire
+            }));
+            setTickets(tickets.map(ticket => {
+                if (ticket.idTicket === idTicket) {
+                    return { ...ticket, volHoraire: updatedVolHoraire };
+                }
+                return ticket;
+            }));
         } catch (error) {
             console.error("Erreur lors de la mise à jour du ticket:", error);
         }
@@ -99,13 +112,33 @@ const TicketComponent = () => {
     const editTicket = (id) => {
         setEditingTicketId(id);
         const ticket = tickets.find(t => t.idTicket === id);
-        setDraftTicket({ ...ticket });
+        const volHoraireCopy = ticket.volHoraire.map(vh => ({
+            idPersonne: vh.id.idPersonne,
+            volHoraire: vh.volHoraire
+        }));
+    
+        setDraftTicket({ ...ticket, volHoraire: volHoraireCopy });
     };
 
     const saveChanges = async (id) => {
         try {
+            console.log(draftTicket);
             await ticketService.updateTicket(id, draftTicket);
-            setTickets(tickets.map(ticket => ticket.idTicket === id ? { ...ticket, ...draftTicket } : ticket));
+            const updatedVolHoraire = draftTicket.volHoraire.map(vh => ({
+                id: {
+                    idTicket: draftTicket.idTicket,
+                    idPersonne: vh.idPersonne
+                },
+                volHoraire: vh.volHoraire
+            }));
+            setTickets(tickets.map(ticket => {
+                if (ticket.idTicket === draftTicket.idTicket) {
+                    return { ...draftTicket, volHoraire: updatedVolHoraire };
+                    
+                }
+                return ticket;
+            }));
+            // setTickets(tickets.map(ticket => ticket.idTicket === id ? { ...ticket, ...draftTicket } : ticket));
             setEditingTicketId(null);
         } catch (error) {
             console.error("There was an error updating the ticket!", error);
@@ -122,6 +155,7 @@ const TicketComponent = () => {
     const handleClosePopup = () => {
         setSelectedTicket(null);
     };
+
 
     return (
         <div>
@@ -223,7 +257,7 @@ const TicketComponent = () => {
                         </tr>
                     </thead>
                     <tbody id="tickets">
-                        {tickets.map((ticket) => (
+                        {Array.isArray(tickets) &&  tickets.map((ticket) => (
                             <tr key={ticket.idTicket} onClick={(e) => openPopup(e, ticket)}>
                                 <td>{ticket.idTicket}</td>
                                 <td>

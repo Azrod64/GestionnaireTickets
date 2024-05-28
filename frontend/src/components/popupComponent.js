@@ -4,7 +4,10 @@ import './Popup.css';
 const Popup = ({ ticket, personnes, onClose, onUpdate }) => {
     const [editIndex, setEditIndex] = useState(-1);
     const [newPerson, setNewPerson] = useState({ idPersonne: '', volHoraire: '' });
+    const [errorMessage, setErrorMessage] = useState('');
 
+
+    
     const handleEdit = (index) => {
         setEditIndex(index);
     };
@@ -20,11 +23,17 @@ const Popup = ({ ticket, personnes, onClose, onUpdate }) => {
     };
 
     const handleAddPerson = () => {
+        if (!newPerson.idPersonne || newPerson.volHoraire === '' || isNaN(newPerson.volHoraire)) {
+            setErrorMessage('Please fill all fields correctly.');
+            return;
+        }
         ticket.volHoraire.push({ id: { idPersonne: newPerson.idPersonne }, volHoraire: newPerson.volHoraire });
         onUpdate(ticket.idTicket, ticket.volHoraire);
-        setNewPerson({ idPersonne: '', volHoraire: '' }); // Reset new person form
+        setNewPerson({ idPersonne: '', volHoraire: '' }); 
+        setErrorMessage('');
     };
 
+    
     return (
         <div className="popup">
             <div className="popup-inner">
@@ -46,14 +55,14 @@ const Popup = ({ ticket, personnes, onClose, onUpdate }) => {
                                 <tr key={index}>
                                     <td>{editIndex !== index ? (personne ? `${personne.prenom} ${personne.nom}` : 'N/A') :
                                         // Dropdown to select person
-                                        <select value={item.id.idPersonne} onChange={e => item.id.idPersonne = parseInt(e.target.value)}>
+                                        <select value={item.id.idPersonne} onChange={e => item.id.idPersonne = parseInt(e.target.value)} required> 
                                             {personnes.map(p => (
                                                 <option key={p.idPersonne} value={p.idPersonne}>{p.prenom} {p.nom}</option>
                                             ))}
                                         </select>
                                     }</td>
                                     <td>{editIndex !== index ? item.volHoraire :
-                                        <input type="number" value={item.volHoraire} onChange={e => item.volHoraire = parseInt(e.target.value)} />
+                                        <input  type="number" value={item.volHoraire} onChange={e => item.volHoraire = parseInt(e.target.value)}/>
                                     }</td>
                                     <td>
                                         {editIndex !== index ? (
@@ -84,6 +93,7 @@ const Popup = ({ ticket, personnes, onClose, onUpdate }) => {
                                 <button onClick={handleAddPerson}>Add</button>
                             </td>
                         </tr>
+                        {errorMessage && <tr><td colSpan="3" style={{ color: 'red' }}>{errorMessage}</td></tr>}
                     </tbody>
                 </table>
             </div>
