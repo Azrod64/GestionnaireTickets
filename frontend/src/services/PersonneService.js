@@ -1,7 +1,7 @@
 const BASE_URL = 'http://localhost:8080';
 
 const createUser = async (user, type) => {
-    const endpoint = `${BASE_URL}/createUser/${type === 'technician' ? 1 : 0}`;
+    const endpoint = `${BASE_URL}/createUser/${type === 'technicien' ? 1 : 0}`;
     try {
         const response = await fetch(endpoint, {
             method: 'POST',
