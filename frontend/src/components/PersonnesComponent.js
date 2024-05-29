@@ -337,7 +337,7 @@ const PersonnesComponent = () => {
                                         style={{ width: '1.3em' }}
                                         src={`${process.env.PUBLIC_URL}/images/trash.png`}
                                         alt="remove"
-                                        onClick={() => handleDeletePerson(people.idPersonne)}
+                                        onClick={() => handleDeletePerson(person.idPersonne)}
                                     />
                                 </td>
                             </tr>
