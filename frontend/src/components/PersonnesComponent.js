@@ -261,7 +261,7 @@ const PersonnesComponent = () => {
                         <th>Actions</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody id="personnesCompo">
                     {filteredPeople.map((person) => (
                         <tr key={person.idPersonne}>
                                 <td>{person.idPersonne}</td>

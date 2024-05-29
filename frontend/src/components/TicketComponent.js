@@ -71,7 +71,19 @@ const TicketComponent = () => {
             };
             const updatedTicket = await ticketService.createTicket(ticketToCreate);
             const fetchedPersonnes = await personneService.getPersonnes(); 
-            setTickets(prevTickets => Array.isArray(prevTickets) ? prevTickets.concat(updatedTicket) : [updatedTicket]);
+            console.log(ticketToCreate);
+            const ticketToUpdate = {
+                ...updatedTicket,
+                volHoraire: ticketToCreate.volHoraire.map(vh => ({
+                    id:{
+                        idPersonne: parseInt(vh.idPersonne),
+                        idTicket: updatedTicket.idTicket
+                    },
+                    volHoraire: vh.volHoraire
+                }))
+            };
+            setTickets(prevTickets => Array.isArray(prevTickets) ? prevTickets.concat(ticketToUpdate) : [ticketToUpdate]);
+
             setPersonnes(fetchedPersonnes); 
             setNewTicket({ description: '', genreProblem: '', nomClient: '', serviceDedie: '', statut: 0, volHoraire: [] });
             setAdditionalInputs([{ volHoraire: null, idPersonne: null }]);
@@ -122,7 +134,6 @@ const TicketComponent = () => {
 
     const saveChanges = async (id) => {
         try {
-            console.log(draftTicket);
             await ticketService.updateTicket(id, draftTicket);
             const updatedVolHoraire = draftTicket.volHoraire.map(vh => ({
                 id: {
@@ -209,7 +220,7 @@ const TicketComponent = () => {
                     onChange={(e) => setNewTicket({ ...newTicket, genreProblem: e.target.value })}
                     required
                 >
-                    <option value="">Select your option</option>
+                    <option value="">Sélectionner</option>
                     <option value="Hardware">Hardware</option>
                     <option value="Software">Software</option>
                 </select>
@@ -221,7 +232,7 @@ const TicketComponent = () => {
                             onChange={(e) => handleAdditionalInputChange(e, index, 'idPersonne')}
                             required
                         >
-                            <option value="">Select your option</option>
+                            <option value="">Sélectionner</option>
                             {personnes.map(personne => (
                                 <option key={personne.idPersonne} value={personne.idPersonne}>
                                     {personne.prenom} {personne.nom}

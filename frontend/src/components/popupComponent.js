@@ -5,7 +5,8 @@ const Popup = ({ ticket, personnes, onClose, onUpdate }) => {
     const [editIndex, setEditIndex] = useState(-1);
     const [newPerson, setNewPerson] = useState({ idPersonne: '', volHoraire: '' });
     const [errorMessage, setErrorMessage] = useState('');
-
+    console.log(personnes);
+    console.log(ticket);
 
     
     const handleEdit = (index) => {

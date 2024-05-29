@@ -107,6 +107,7 @@ body{
     overflow-y: none;
 }
 
+
 .menu-links a {
     display: block;
     font-size: 18px;
@@ -120,4 +121,15 @@ body{
 .menu-links a:hover {
     background-color: #f0f0f0;
     color: #000;
+}
+
+#personnesCompo tr:hover{
+    transform: scale(1);
+    cursor: unset;
+    background-color: rgb(242, 242, 242);
+    
+}
+
+#personnesCompo tr:nth-child(2n):hover{
+    background-color:#1a1a2e28 ;
 }
